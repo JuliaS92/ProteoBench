@@ -42,13 +42,13 @@ class VariablesSubcellprofileDOMLFQ:
 
     additional_params_json: str = "../webinterface/configuration/subcell_domlfq.json"
 
-    description_module_md: str = "pages/markdown_files/Quant/lfq/ion/DIA/AIF/introduction.md"
-    description_files_md: str = "pages/markdown_files/Quant/lfq/ion/DIA/AIF/file_description.md"
-    description_input_file_md: str = "pages/markdown_files/Quant/lfq/ion/DIA/AIF/input_file_description.md"
-    description_slider_md: str = "pages/markdown_files/Quant/lfq/ion/DIA/AIF/slider_description.md"
-    description_table_md: str = "pages/markdown_files/Quant/lfq/ion/DIA/AIF/table_description.md"
-    description_results_md: str = "pages/markdown_files/Quant/lfq/ion/DIA/AIF/result_description.md"
-    description_submission_md: str = "pages/markdown_files/Quant/lfq/ion/DIA/AIF/submit_description.md"
+    description_module_md: str = "pages/markdown_files/subcellprofile/DOMLFQ/protein/DIA/EXPL/introduction.md"
+    description_files_md: str = "pages/markdown_files/subcellprofile/DOMLFQ/protein/DIA/EXPL/file_description.md"
+    description_input_file_md: str = "pages/markdown_files/subcellprofile/DOMLFQ/protein/DIA/EXPL/input_file_description.md"
+    description_slider_md: str = "pages/markdown_files/subcellprofile/DOMLFQ/protein/DIA/EXPL/slider_description.md"
+    description_table_md: str = "pages/markdown_files/subcellprofile/DOMLFQ/protein/DIA/EXPL/table_description.md"
+    description_results_md: str = "pages/markdown_files/subcellprofile/DOMLFQ/protein/DIA/EXPL/result_description.md"
+    description_submission_md: str = "pages/markdown_files/subcellprofile/DOMLFQ/protein/DIA/EXPL/submit_description.md"
 
     all_datapoints_submitted: str = "all_datapoints_submitted_subcell_domlfq"
     placeholder_table_submitted: str = "placeholder_table_submitted_subcell_domlfq"
@@ -58,7 +58,7 @@ class VariablesSubcellprofileDOMLFQ:
     parse_settings_dir: str = "../proteobench/io/parsing/io_parse_settings/Quant/lfq/ion/DIA/AIF"
 
     texts: Type[WebpageTexts] = WebpageTexts
-    doc_url: str = "https://proteobench.readthedocs.io/en/latest/available-modules/4-quant-lfq-ion-dia-aif/"
+    doc_url: str = "https://proteobench.readthedocs.io/en/latest/available-modules/6-subcellprofile-domlfq-protein-DIA-expl/"
 
     title: str = "Subcellular protein profiling - DOMLFQ"
 
