@@ -12,6 +12,7 @@ import pandas as pd
 
 import proteobench
 
+
 @dataclass
 class SubcellprofileDatapoint:
     """
@@ -58,14 +59,13 @@ class SubcellprofileDatapoint:
     max_peptide_length: int = 0
     is_temporary: bool = True
     intermediate_hash: str = ""
-    results: dict = None # TODO: discuss what exactly is going in here
+    results: dict = None  # TODO: discuss what exactly is going in here
     comments: str = ""
     proteobench_version: str = ""
     depth_id_1: int = 0
     depth_profile_1: int = 0
     depth_id_3: int = 0
     depth_profile_3: int = 0
-
 
     def generate_id(self) -> None:
         """
@@ -130,9 +130,10 @@ class SubcellprofileDatapoint:
 
         result_datapoint.generate_id()
 
-
         # calculate depth, reproducibility and profiling precision
-        results = dict(ChainMap(*[SubcellprofileDatapoint.get_metrics(intermediate, nr_observed) for nr_observed in range(1, 7)]))
+        results = dict(
+            ChainMap(*[SubcellprofileDatapoint.get_metrics(intermediate, nr_observed) for nr_observed in range(1, 7)])
+        )
         result_datapoint.results = results
         results_series = pd.Series(dataclasses.asdict(result_datapoint))
 
