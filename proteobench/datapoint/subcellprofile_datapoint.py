@@ -39,6 +39,7 @@ class SubcellprofileDatapoint:
         results (dict): A dictionary of metrics for the benchmark run.
         comments (str): Any additional comments.
         proteobench_version (str): Version of the Proteobench tool used.
+        domaps_version (str): Version of the domaps used for metrics calculation.
 
     """
 
