@@ -44,7 +44,9 @@ class VariablesSubcellprofileDOMLFQ:
 
     description_module_md: str = "pages/markdown_files/subcellprofile/DOMLFQ/protein/DIA/EXPL/introduction.md"
     description_files_md: str = "pages/markdown_files/subcellprofile/DOMLFQ/protein/DIA/EXPL/file_description.md"
-    description_input_file_md: str = "pages/markdown_files/subcellprofile/DOMLFQ/protein/DIA/EXPL/input_file_description.md"
+    description_input_file_md: str = (
+        "pages/markdown_files/subcellprofile/DOMLFQ/protein/DIA/EXPL/input_file_description.md"
+    )
     description_slider_md: str = "pages/markdown_files/subcellprofile/DOMLFQ/protein/DIA/EXPL/slider_description.md"
     description_table_md: str = "pages/markdown_files/subcellprofile/DOMLFQ/protein/DIA/EXPL/table_description.md"
     description_results_md: str = "pages/markdown_files/subcellprofile/DOMLFQ/protein/DIA/EXPL/result_description.md"
@@ -58,7 +60,9 @@ class VariablesSubcellprofileDOMLFQ:
     parse_settings_dir: str = "../proteobench/io/parsing/io_parse_settings/Quant/lfq/ion/DIA/AIF"
 
     texts: Type[WebpageTexts] = WebpageTexts
-    doc_url: str = "https://proteobench.readthedocs.io/en/latest/available-modules/6-subcellprofile-domlfq-protein-DIA-expl/"
+    doc_url: str = (
+        "https://proteobench.readthedocs.io/en/latest/available-modules/6-subcellprofile-domlfq-protein-DIA-expl/"
+    )
 
     title: str = "Subcellular protein profiling - DOMLFQ"
 
