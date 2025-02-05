@@ -9,8 +9,9 @@ TESTDATA_DIR = os.path.join(os.path.dirname(__file__), "../data/subcellprofile_d
 TESTDATA_FILES = {
     "DIA-NN": os.path.join(TESTDATA_DIR, "DIA-NN_example_domlfq_report.pg_matrix.tsv"),
     "FragPipe (DIA-NN quant)": os.path.join(TESTDATA_DIR, "FragPipe-DIA-NN_example_domlfq_report.pg_matrix.tsv"),
+    "AlphaDIA": os.path.join(TESTDATA_DIR, "AlphaDIA_example_domlfq_report.pg.matrix.tsv"),
 }
-SUPPORTED_SOFTWARE_TOOLS = ("DIA-NN", "FragPipe (DIA-NN quant)")
+SUPPORTED_SOFTWARE_TOOLS = ("DIA-NN", "FragPipe (DIA-NN quant)", "AlphaDIA")
 PARSE_SETTINGS_DIR = os.path.abspath(
     os.path.join(
         os.path.dirname(__file__),
