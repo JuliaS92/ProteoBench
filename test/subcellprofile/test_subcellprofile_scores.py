@@ -45,6 +45,12 @@ def test_run_SpatialDataSetComparison_noerrors(sp_scores: Subcellprofile_Scores)
     sp_scores.run_SpatialDataSetComparison()
 
 
+def test_median_profile_reproducibility(Score_SpatialDataSetComparison):
+    """Running the method median_profile_reproducibility and assert the cast of the result."""
+    medians_test = Score_SpatialDataSetComparison.median_profile_reproducibility()
+    assert isinstance(medians_test, float)
+
+
 def test_complex_scatter_unnormalized_noerrors(Score_SpatialDataSetComparison):
     """Test the complex scatter average is calculated correctly."""
     mean_complex_scatter = Score_SpatialDataSetComparison.complex_scatter_unnormalized()
