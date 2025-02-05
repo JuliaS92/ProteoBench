@@ -1,12 +1,13 @@
 from __future__ import annotations
 
 import os
-from typing import Any, Dict, Optional, Tuple
+from typing import Optional, Tuple
 
 import pandas as pd
 from pandas import DataFrame
 
-from proteobench.datapoint.quant_datapoint import QuantDatapoint
+# TODO: Needs to be adapted to the new Datapoint and QuantScores classes
+from proteobench.datapoint.quant_datapoint import Datapoint
 from proteobench.exceptions import (
     ConvertStandardFormatError,
     DatapointAppendError,
@@ -16,20 +17,21 @@ from proteobench.exceptions import (
     ParseSettingsError,
     QuantificationError,
 )
-from proteobench.io.parsing.parse_ion import load_input_file
+from proteobench.io.parsing.parse_proteins import load_input_file
 from proteobench.io.parsing.parse_settings import ParseSettingsBuilder
 from proteobench.modules.quant.quant_base.quant_base_module import QuantModule
 from proteobench.score.quant.quantscores import QuantScores
 
 
-class DIAQuantIonModulediaPASEF(QuantModule):
-    """DIA Quantification Module for Ion level Quantification for diaPASEF."""
+# class DIAQuantIonModule(QuantModule):
+class SubcellprofileDomlfqProteinDIAEXPLModule:
+    """DIA Quantification Module for Ion level Quantification."""
 
     def __init__(
         self,
         token: str,
-        proteobot_repo_name: str = "Proteobot/Results_quant_ion_DIA_diaPASEF",
-        proteobench_repo_name: str = "Proteobench/Results_quant_ion_DIA_diaPASEF",
+        proteobot_repo_name: str = "Proteobot/Results_subcellprofile_DOMLFQ_protein_DIA_EXPL",
+        proteobench_repo_name: str = " Proteobench/Results_subcellprofile_DOMLFQ_protein_DIA_EXPL",
         parse_settings_dir: str = os.path.abspath(
             os.path.join(
                 os.path.dirname(__file__),
@@ -41,17 +43,16 @@ class DIAQuantIonModulediaPASEF(QuantModule):
                 "io",
                 "parsing",
                 "io_parse_settings",
-                "Quant",
-                "lfq",
-                "ion",
-                "DIA",
-                "diaPASEF",
+                "subcellprofile",
+                "domlfq",
+                "protein",
+                "subcellprofile_domlfq_protein_DIA_EXPL",
             )
         ),
-        module_id: str = "quant_lfq_ion_DIA_diaPASEF",
+        module_id: str = "subcellprofile_domlfq_protein_DIA_EXPL",
     ):
         """
-        DIA Quantification Module for Ion level Quantification for diaPASEF.
+        DIA Quantification Module for Ion level Quantification.
 
         Args:
             token (str): GitHub token for the user.
@@ -67,7 +68,6 @@ class DIAQuantIonModulediaPASEF(QuantModule):
             parse_settings_dir=parse_settings_dir,
             module_id=module_id,
         )
-        self.precursor_name = "precursor ion"
 
     def is_implemented(self) -> bool:
         """Returns whether the module is fully implemented."""
@@ -79,7 +79,6 @@ class DIAQuantIonModulediaPASEF(QuantModule):
         input_format: str,
         user_input: dict,
         all_datapoints: Optional[pd.DataFrame],
-        default_cutoff_min_prec: int = 3,
     ) -> Tuple[DataFrame, DataFrame, DataFrame]:
         """
         Main workflow of the module for benchmarking workflow results.
@@ -89,7 +88,6 @@ class DIAQuantIonModulediaPASEF(QuantModule):
             input_format (str): Format of the workflow output file.
             user_input (dict): User-provided parameters for plotting.
             all_datapoints (Optional[pd.DataFrame]): DataFrame containing all data points from the repo.
-            default_cutoff_min_prec (int, optional): Minimum number of runs an ion must be identified in. Defaults to 3.
 
         Returns:
             Tuple[DataFrame, DataFrame, DataFrame]: A tuple containing the intermediate data structure, all data points, and the input DataFrame.
@@ -123,6 +121,8 @@ class DIAQuantIonModulediaPASEF(QuantModule):
         except Exception as e:
             raise ConvertStandardFormatError(f"Error converting to standard format: {e}")
 
+        return pd.DataFrame(), pd.DataFrame(), input_df
+        """
         # Calculate quantification scores
         try:
             quant_score = QuantScores(
@@ -139,7 +139,7 @@ class DIAQuantIonModulediaPASEF(QuantModule):
 
         # Generate current data point
         try:
-            current_datapoint = QuantDatapoint.generate_datapoint(
+            current_datapoint = Datapoint.generate_datapoint(
                 intermediate_data_structure, input_format, user_input, default_cutoff_min_prec=default_cutoff_min_prec
             )
         except Exception as e:
@@ -157,3 +157,4 @@ class DIAQuantIonModulediaPASEF(QuantModule):
             all_datapoints,
             input_df,
         )
+        """

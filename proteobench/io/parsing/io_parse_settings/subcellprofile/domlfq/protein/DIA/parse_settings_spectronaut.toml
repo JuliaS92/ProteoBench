@@ -1,0 +1,50 @@
+[mapper]
+"PG.ProteinGroups" = "Proteins"
+"R.FileName" = "Raw file"
+"PG.Quantity" = "Intensity"
+
+[condition_mapper]
+"20210131_EXPL4_ViAl_SA_HeLa_Evosep_21min_DIA_120k_15k_1-5_Map2_3K" = "Rep2_3K"
+"20210131_EXPL4_ViAl_SA_HeLa_Evosep_21min_DIA_120k_15k_1-5s_Map1_12K" = "Rep1_12K"
+"20210131_EXPL4_ViAl_SA_HeLa_Evosep_21min_DIA_120k_15k_1-5s_Map1_1K_20210131142601" = "Rep1_1K"
+"20210131_EXPL4_ViAl_SA_HeLa_Evosep_21min_DIA_120k_15k_1-5s_Map1_24K" = "Rep1_24K"
+"20210131_EXPL4_ViAl_SA_HeLa_Evosep_21min_DIA_120k_15k_1-5s_Map1_3K" = "Rep1_3K"
+"20210131_EXPL4_ViAl_SA_HeLa_Evosep_21min_DIA_120k_15k_1-5s_Map1_6K" = "Rep1_6K"
+"20210131_EXPL4_ViAl_SA_HeLa_Evosep_21min_DIA_120k_15k_1-5s_Map1_80K" = "Rep1_80K"
+"20210131_EXPL4_ViAl_SA_HeLa_Evosep_21min_DIA_120k_15k_1-5s_Map2_12K" = "Rep2_12K"
+"20210131_EXPL4_ViAl_SA_HeLa_Evosep_21min_DIA_120k_15k_1-5s_Map2_1K" = "Rep2_1K"
+"20210131_EXPL4_ViAl_SA_HeLa_Evosep_21min_DIA_120k_15k_1-5s_Map2_24K" = "Rep2_24K"
+"20210131_EXPL4_ViAl_SA_HeLa_Evosep_21min_DIA_120k_15k_1-5s_Map2_6K" = "Rep2_6K"
+"20210131_EXPL4_ViAl_SA_HeLa_Evosep_21min_DIA_120k_15k_1-5s_Map2_80K" = "Rep2_80K"
+"20210131_EXPL4_ViAl_SA_HeLa_Evosep_21min_DIA_120k_15k_1-5s_Map3_12K" = "Rep3_12K"
+"20210131_EXPL4_ViAl_SA_HeLa_Evosep_21min_DIA_120k_15k_1-5s_Map3_1K" = "Rep3_1K"
+"20210131_EXPL4_ViAl_SA_HeLa_Evosep_21min_DIA_120k_15k_1-5s_Map3_24K" = "Rep3_24K"
+"20210131_EXPL4_ViAl_SA_HeLa_Evosep_21min_DIA_120k_15k_1-5s_Map3_3K" = "Rep3_3K"
+"20210131_EXPL4_ViAl_SA_HeLa_Evosep_21min_DIA_120k_15k_1-5s_Map3_6K" = "Rep3_6K"
+"20210131_EXPL4_ViAl_SA_HeLa_Evosep_21min_DIA_120k_15k_1-5s_Map3_80K" = "Rep3_80K"
+
+[run_mapper]
+"20210131_EXPL4_ViAl_SA_HeLa_Evosep_21min_DIA_120k_15k_1-5_Map2_3K" = "Rep2_3K"
+"20210131_EXPL4_ViAl_SA_HeLa_Evosep_21min_DIA_120k_15k_1-5s_Map1_12K" = "Rep1_12K"
+"20210131_EXPL4_ViAl_SA_HeLa_Evosep_21min_DIA_120k_15k_1-5s_Map1_1K_20210131142601" = "Rep1_1K"
+"20210131_EXPL4_ViAl_SA_HeLa_Evosep_21min_DIA_120k_15k_1-5s_Map1_24K" = "Rep1_24K"
+"20210131_EXPL4_ViAl_SA_HeLa_Evosep_21min_DIA_120k_15k_1-5s_Map1_3K" = "Rep1_3K"
+"20210131_EXPL4_ViAl_SA_HeLa_Evosep_21min_DIA_120k_15k_1-5s_Map1_6K" = "Rep1_6K"
+"20210131_EXPL4_ViAl_SA_HeLa_Evosep_21min_DIA_120k_15k_1-5s_Map1_80K" = "Rep1_80K"
+"20210131_EXPL4_ViAl_SA_HeLa_Evosep_21min_DIA_120k_15k_1-5s_Map2_12K" = "Rep2_12K"
+"20210131_EXPL4_ViAl_SA_HeLa_Evosep_21min_DIA_120k_15k_1-5s_Map2_1K" = "Rep2_1K"
+"20210131_EXPL4_ViAl_SA_HeLa_Evosep_21min_DIA_120k_15k_1-5s_Map2_24K" = "Rep2_24K"
+"20210131_EXPL4_ViAl_SA_HeLa_Evosep_21min_DIA_120k_15k_1-5s_Map2_6K" = "Rep2_6K"
+"20210131_EXPL4_ViAl_SA_HeLa_Evosep_21min_DIA_120k_15k_1-5s_Map2_80K" = "Rep2_80K"
+"20210131_EXPL4_ViAl_SA_HeLa_Evosep_21min_DIA_120k_15k_1-5s_Map3_12K" = "Rep3_12K"
+"20210131_EXPL4_ViAl_SA_HeLa_Evosep_21min_DIA_120k_15k_1-5s_Map3_1K" = "Rep3_1K"
+"20210131_EXPL4_ViAl_SA_HeLa_Evosep_21min_DIA_120k_15k_1-5s_Map3_24K" = "Rep3_24K"
+"20210131_EXPL4_ViAl_SA_HeLa_Evosep_21min_DIA_120k_15k_1-5s_Map3_3K" = "Rep3_3K"
+"20210131_EXPL4_ViAl_SA_HeLa_Evosep_21min_DIA_120k_15k_1-5s_Map3_6K" = "Rep3_6K"
+"20210131_EXPL4_ViAl_SA_HeLa_Evosep_21min_DIA_120k_15k_1-5s_Map3_80K" = "Rep3_80K"
+
+[species_mapper]
+
+[general]
+contaminant_flag = "Cont_"
+decoy_flag = false
