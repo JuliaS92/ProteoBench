@@ -1,7 +1,7 @@
 import json
 import os
 
-from pytest import fixture
+from pytest import fixture, skip
 
 from proteobench.score.subcellprofile.subcellprofile_scores import Subcellprofile_Scores
 
@@ -45,6 +45,8 @@ def test_run_SpatialDataSetComparison_noerrors(sp_scores: Subcellprofile_Scores)
     sp_scores.run_SpatialDataSetComparison()
 
 
+# TODO: requires domaps 1.0.5
+@skip
 def test_median_profile_reproducibility(Score_SpatialDataSetComparison):
     """Running the method median_profile_reproducibility and assert the cast of the result."""
     medians_test = Score_SpatialDataSetComparison.median_profile_reproducibility()
