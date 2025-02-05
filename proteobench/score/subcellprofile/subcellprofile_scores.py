@@ -4,6 +4,7 @@ import json
 from io import StringIO
 
 import domaps
+import numpy as np
 
 
 class Subcellprofile_Scores:
@@ -80,8 +81,19 @@ class Subcellprofile_Scores:
         results["depth_profile_intersection"] = self.sdc.df_quantity_pr_pg_combined.query(
             "filtering=='after_filtering' and type=='intersection'"
         )["number of protein groups"].values[0]
-
+        results["median_profile_reproducibility"] = self.median_profile_reproducibility()
         return results
+
+    def median_profile_reproducibility(self):
+        """
+        Determine the median of distances for a dataframe.
+
+        Returns
+        -------
+        float
+            Median of the distances.
+        """
+        return np.median(self.sdc.distances.to_numpy())
 
     def complex_scatter_unnormalized(self, mode="mean") -> float:
         """
