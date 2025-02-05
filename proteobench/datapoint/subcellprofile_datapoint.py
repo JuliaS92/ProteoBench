@@ -40,9 +40,16 @@ class SubcellprofileDatapoint:
         comments (str): Any additional comments.
         proteobench_version (str): Version of the Proteobench tool used.
         domaps_version (str): Version of the domaps used for metrics calculation.
+        depth_id_total (int): number of proteins identified in total
+        depth_profile_total (int): number of profiled (4 successive values) proteins in total
+        depth_id_intersection (int): number of proteins identified in all replicates
+        depth_profile_intersection (int): inumber of profiled (4 successive values) proteins in all replicates
+        median_profile_reproducibility (float): median profile reproducibility calculated by domaps
+        mean_complex_scatter (float): mean complex scatter calculated by domaps
 
     """
 
+    #TODO: remove the attributes that are parameters to add them during parameter parsing
     id: str = None
     software_name: str = None
     software_version: int = 0
@@ -63,10 +70,13 @@ class SubcellprofileDatapoint:
     results: dict = None  # TODO: discuss what exactly is going in here
     comments: str = ""
     proteobench_version: str = ""
-    depth_id_1: int = 0
-    depth_profile_1: int = 0
-    depth_id_3: int = 0
-    depth_profile_3: int = 0
+    domaps_version: str = ""
+    depth_id_total: int = 0
+    depth_profile_total: int = 0
+    depth_id_intersection: int = 0
+    depth_profile_intersection: int = 0
+    median_profile_reproducibility: float = 0.0
+    mean_complex_scatter: float = 0.0
 
     def generate_id(self) -> None:
         """
