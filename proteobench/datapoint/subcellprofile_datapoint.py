@@ -51,7 +51,7 @@ class SubcellprofileDatapoint:
 
     """
 
-    #TODO: remove the attributes that are parameters to add them during parameter parsing
+    # TODO: remove the attributes that are parameters to add them during parameter parsing
     id: str = None
     software_name: str = None
     software_version: int = 0
