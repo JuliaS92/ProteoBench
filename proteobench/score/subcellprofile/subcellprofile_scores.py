@@ -71,17 +71,18 @@ class Subcellprofile_Scores:
         results = {}
         results["depth_id_total"] = self.sdc.df_quantity_pr_pg_combined.query(
             "filtering=='before_filtering' and type=='total'"
-        )["number of protein groups"].values[0]
+        )["number of protein groups"]
         results["depth_profile_intersection"] = self.sdc.df_quantity_pr_pg_combined.query(
             "filtering=='after_filtering' and type=='total'"
-        )["number of protein groups"].values[0]
+        )["number of protein groups"]
         results["depth_id_total"] = self.sdc.df_quantity_pr_pg_combined.query(
             "filtering=='before_filtering' and type=='intersection'"
-        )["number of protein groups"].values[0]
+        )["number of protein groups"]
         results["depth_profile_intersection"] = self.sdc.df_quantity_pr_pg_combined.query(
             "filtering=='after_filtering' and type=='intersection'"
-        )["number of protein groups"].values[0]
+        )["number of protein groups"]
         results["median_profile_reproducibility"] = self.median_profile_reproducibility()
+        results["mean_complex_scatter"] = self.complex_scatter_unnormalized()
         return results
 
     def median_profile_reproducibility(self):
