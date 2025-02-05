@@ -24,14 +24,14 @@ from proteobench.score.quant.quantscores import QuantScores
 
 
 # class DIAQuantIonModule(QuantModule):
-class SubcellprofileDomlfqProteinDIAModule:
+class SubcellprofileDomlfqProteinDIAEXPLModule:
     """DIA Quantification Module for Ion level Quantification."""
 
     def __init__(
         self,
         token: str,
-        proteobot_repo_name: str = "Proteobot/Results_quant_ion_DIA",  # TODO: Update to new streamlit page
-        proteobench_repo_name: str = "Proteobench/Results_quant_ion_DIA",  # TODO: Update to new streamlit page
+        proteobot_repo_name: str = "Proteobot/Results_subcellprofile_DOMLFQ_protein_DIA_EXPL",
+        proteobench_repo_name: str = " Proteobench/Results_subcellprofile_DOMLFQ_protein_DIA_EXPL",
         parse_settings_dir: str = os.path.abspath(
             os.path.join(
                 os.path.dirname(__file__),
