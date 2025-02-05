@@ -12,6 +12,8 @@ import pandas as pd
 
 import proteobench
 
+import domaps
+
 
 @dataclass
 class SubcellprofileDatapoint:
@@ -137,6 +139,7 @@ class SubcellprofileDatapoint:
             intermediate_hash=str(hashlib.sha1(intermediate.to_string().encode("utf-8")).hexdigest()),
             comments=user_input["comments_for_plotting"],
             proteobench_version=proteobench.__version__,
+            domaps_version=domaps.__version__,
         )
 
         result_datapoint.generate_id()
