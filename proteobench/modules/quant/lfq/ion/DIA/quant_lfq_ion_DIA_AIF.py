@@ -1,3 +1,7 @@
+"""
+DIA Quantification Module for Ion level Quantification.
+"""
+
 from __future__ import annotations
 
 import os
@@ -23,7 +27,22 @@ from proteobench.score.quant.quantscores import QuantScores
 
 
 class DIAQuantIonModule(QuantModule):
-    """DIA Quantification Module for Ion level Quantification."""
+    """
+    DIA Quantification Module for Ion level Quantification.
+
+    Parameters
+    ----------
+    token : str
+        GitHub token for the user.
+    proteobot_repo_name : str
+        Name of the repository for pull requests and where new points are added.
+    proteobench_repo_name : str
+        Name of the repository where the benchmarking results will be stored.
+    parse_settings_dir : str
+        Directory containing parsing settings.
+    module_id : str
+        Module identifier for configuration.
+    """
 
     def __init__(
         self,
@@ -53,12 +72,18 @@ class DIAQuantIonModule(QuantModule):
         """
         DIA Quantification Module for Ion level Quantification.
 
-        Args:
-            token (str): GitHub token for the user.
-            proteobot_repo_name (str): Name of the repository for pull requests and where new points are added.
-            proteobench_repo_name (str): Name of the repository where the benchmarking results will be stored.
-            parse_settings_dir (str): Directory containing parsing settings.
-            module_id (str): Module identifier for configuration.
+        Parameters
+        ----------
+        token : str
+            GitHub token for the user.
+        proteobot_repo_name : str
+            Name of the repository for pull requests and where new points are added.
+        proteobench_repo_name : str
+            Name of the repository where the benchmarking results will be stored.
+        parse_settings_dir : str
+            Directory containing parsing settings.
+        module_id : str
+            Module identifier for configuration.
         """
         super().__init__(
             token,
@@ -70,7 +95,14 @@ class DIAQuantIonModule(QuantModule):
         self.precursor_name = "precursor ion"
 
     def is_implemented(self) -> bool:
-        """Returns whether the module is fully implemented."""
+        """
+        Return whether the module is fully implemented.
+
+        Returns
+        -------
+        bool
+            Whether the module is fully implemented.
+        """
         return False
 
     def benchmarking(
@@ -84,15 +116,23 @@ class DIAQuantIonModule(QuantModule):
         """
         Main workflow of the module for benchmarking workflow results.
 
-        Args:
-            input_file (str): Path to the workflow output file.
-            input_format (str): Format of the workflow output file.
-            user_input (dict): User-provided parameters for plotting.
-            all_datapoints (Optional[pd.DataFrame]): DataFrame containing all data points from the repo.
-            default_cutoff_min_prec (int, optional): Minimum number of runs an ion must be identified in. Defaults to 3.
+        Parameters
+        ----------
+        input_file : str
+            Path to the workflow output file.
+        input_format : str
+            Format of the workflow output file.
+        user_input : str
+            User-provided parameters for plotting.
+        all_datapoints : Optional[pd.DataFrame])
+            DataFrame containing all data points from the repo.
+        default_cutoff_min_prec : int, optional
+            Minimum number of runs an ion must be identified in. Defaults to 3.
 
-        Returns:
-            Tuple[DataFrame, DataFrame, DataFrame]: A tuple containing the intermediate data structure, all data points, and the input DataFrame.
+        Returns
+        -------
+        Tuple[DataFrame, DataFrame, DataFrame]
+            A tuple containing the intermediate data structure, all data points, and the input DataFrame.
         """
         # Parse workflow output file
         try:
@@ -123,7 +163,7 @@ class DIAQuantIonModule(QuantModule):
         except Exception as e:
             raise ConvertStandardFormatError(f"Error converting to standard format: {e}")
 
-        # Calculate quantification scores
+        # Set up QuantScore object
         try:
             quant_score = QuantScores(
                 self.precursor_name, parse_settings.species_expected_ratio(), parse_settings.species_dict()

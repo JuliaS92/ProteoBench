@@ -77,4 +77,9 @@ checks = [
     "SA01",
     "ES01",
     "RT03",
+    "SS06",
+]
+
+exclude = [
+'^test/.*',
 ]
