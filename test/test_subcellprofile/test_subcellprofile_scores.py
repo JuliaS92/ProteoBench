@@ -11,7 +11,6 @@ from proteobench.score.subcellprofile.subcellprofile_scores import Subcellprofil
 dir = os.path.dirname(__file__)
 
 
-
 @fixture
 def Score_SpatialDataSet():
     """Fixture to return a Subcellprofile_Scores object with valid data."""
