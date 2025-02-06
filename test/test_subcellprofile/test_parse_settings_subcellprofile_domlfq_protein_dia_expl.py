@@ -37,6 +37,7 @@ def load_file(format_name: str):
 
 class TestOutputFileReading:
     """Simple tests for reading csv input files."""
+
     def test_if_module_supports_search_tool(self):
         """Test whether all software tools supported by the module are actually tested."""
         parse_settings = ParseSettingsBuilder(
