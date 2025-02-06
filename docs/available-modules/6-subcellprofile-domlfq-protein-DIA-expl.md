@@ -51,9 +51,12 @@ The fasta file provided for this module contains human proteins and contaminant 
 
 ## Metric calculation
 
-For each precursor ion (modified sequence + charge), we calculate the sum of signal per raw file. Contaminant sequences flagged with the prefix "Cont_" in the fasta file are removed, as well as the peptide ions that match proteins from several species and the peptide ions that are not quantified in any raw file. When applicable, "0" are replaced by NAs and missing values are ignored.
-Then we log2-transform the values, and calculate the mean signal per condition, with the standard deviation and coefficient of variation (CV). For each precursor ion, we calculate the difference between the mean(log2) in A and B, and compare it to its expected value. The difference between measured and expected mean(log2) is called "epsilon".
-The total number of unique precursor ions is reported on the vertical axis, and the mean or median absolute epsilon is reported on the horizontal axis. Precursors matched to contaminant sequences and/or to multiple species are excluded for error calculation. More detailed description of how the data are handled before metrics calculation may be found in the tool-specific paragraphs below.
+In this module, the performance of the workflow is evaluated on three metrics.
+TBD: which proteins are used and why
+
+1) Profile depth: Number of proteins for which a profile could be calculated. Only proteins with 4 or more quantification values in **consecutive** runs are used.
+2) Reproducibility: Coefficients of Variation
+3) Complex scatter: Mean (?) of the mean (?) manhattan distance of protein profiles to the average (?) protein profile per complex
 
 ## How to use
 
@@ -66,7 +69,7 @@ The module is flexible in terms of what workflow the participants can run. Howev
 |Maximum number of missed cleavages|1|
 |PSM FDR|0.01|
 |Protein FDR|0.01|
-+|Precursor m/z range|350-1400|
+|Precursor m/z range|350-1400|
 |Fragment ion m/z range|361-1033|
 |Endopeptidase|Trypsin/P|
 |Fixed modifications|Carbamidomethylation (C)|
@@ -115,12 +118,6 @@ After upload, you will get a link to a Github pull request associated with your 
 4. Upload “report.pg_matrix.tsv” in order for Proteobench to calculate the ion ratios. For public submission, please provide the parameter file “fragpipe.workflow” that correspond to your search.
 
 ### [Spectronaut](https://biognosys.com/software/spectronaut/?gad_source=1&gclid=CjwKCAjwreW2BhBhEiwAavLwfBvsoFvzw54UAATBCaHN6kn8T0vmcdo1ZLhPUH0t90yM-XGo9_fNOhoCsuUQAvD_BwE) (work in progress)
-
-
-#### Troubleshooting:
-
-Since the Thermo DIA data .raw files were acquired using a staggered window approach it is highly recommended to convert and demultiplex the .RAW files first into .mzML using MSConvert.
-Detailed instructions for this process can be found [here](https://fragpipe.nesvilab.org/docs/tutorial_convert.html#convert-thermo-dia-raw-files-with-overlappingstaggered-windows).
 
 
 ### Custom format
