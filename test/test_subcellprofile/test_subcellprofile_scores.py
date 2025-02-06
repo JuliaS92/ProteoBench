@@ -1,12 +1,14 @@
 import json
 import os
-from unittest.mock import MagicMock, patch
+from unittest.mock import patch
 
 import pandas as pd
 import pytest
 from pytest import fixture
 
-from proteobench.score.subcellprofile.subcellprofile_scores import Subcellprofile_Scores
+from proteobench.score.subcellprofile.subcellprofile_scores import (
+    Subcellprofile_Scores,
+)
 
 dir = os.path.dirname(__file__)
 
@@ -50,13 +52,13 @@ def test_run_SpatialDataSetComparison_noerrors(Score_SpatialDataSet: Subcellprof
 @pytest.mark.skip("requires domaps 1.0.5")
 def test_median_profile_reproducibility(Score_SpatialDataSetComparison):
     """Running the method median_profile_reproducibility and assert the cast of the result."""
-    medians_test = Score_SpatialDataSetComparison.median_profile_reproducibility()
+    medians_test = Score_SpatialDataSetComparison._median_profile_reproducibility()
     assert isinstance(medians_test, float)
 
 
 def test_complex_scatter_unnormalized_noerrors(Score_SpatialDataSetComparison):
     """Test the complex scatter average is calculated correctly."""
-    mean_complex_scatter = Score_SpatialDataSetComparison.complex_scatter_unnormalized()
+    mean_complex_scatter = Score_SpatialDataSetComparison._complex_scatter_unnormalized()
     assert isinstance(mean_complex_scatter, float)
 
 
@@ -72,8 +74,8 @@ def test_get_metrics_dict_keys(mock_aggregate, Score_SpatialDataSetComparison):
     assert set(results.keys()) == set(
         [
             "depth_id_total",
-            "depth_profile_intersection",
-            "depth_id_total",
+            "depth_profile_total",
+            "depth_id_intersection",
             "depth_profile_intersection",
             "median_profile_reproducibility",
             "mean_complex_scatter",
