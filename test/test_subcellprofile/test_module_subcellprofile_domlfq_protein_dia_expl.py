@@ -5,13 +5,17 @@ import pytest
 from proteobench.io.parsing.parse_proteins import load_input_file
 from proteobench.io.parsing.parse_settings import ParseSettingsBuilder
 
-TESTDATA_DIR = os.path.join(os.path.dirname(__file__), "../data/subcellprofile_domlfq_protein_DIA_EXPL")
+TESTDATA_DIR = os.path.join(os.path.dirname(__file__), "../data/subcellprofile")
 TESTDATA_FILES = {
-    "DIA-NN": os.path.join(TESTDATA_DIR, "DIA-NN_example_domlfq_report.pg_matrix.tsv"),
-    "FragPipe (DIA-NN quant)": os.path.join(TESTDATA_DIR, "FragPipe-DIA-NN_example_domlfq_report.pg_matrix.tsv"),
-    "AlphaDIA": os.path.join(TESTDATA_DIR, "AlphaDIA_example_domlfq_report.pg.matrix.tsv"),
+    "DIA-NN": os.path.join(TESTDATA_DIR, "TRIMMED_DIANN_1-9-2_report.pg_matrix.tsv"),
+    "FragPipe (DIA-NN quant)": os.path.join(TESTDATA_DIR, "TRIMMED_FragPipe_DIANNquant_2-0_report.pg_matrix.tsv"),
+    "AlphaDIA": os.path.join(TESTDATA_DIR, "TRIMMED_AlphaDIA_1-9-2_pg.matrix.tsv"),
+    "Spectronaut": os.path.join(
+        TESTDATA_DIR,
+        "TRIMMED_Spectronaut_19-5_20250130_154210_Proteobench-newdataset_DIA_Exploris_compartiments_ProteinPivot_Report.tsv",
+    ),
 }
-SUPPORTED_SOFTWARE_TOOLS = ("DIA-NN", "FragPipe (DIA-NN quant)", "AlphaDIA")
+SUPPORTED_SOFTWARE_TOOLS = ("DIA-NN", "FragPipe (DIA-NN quant)", "AlphaDIA", "Spectronaut")
 PARSE_SETTINGS_DIR = os.path.abspath(
     os.path.join(
         os.path.dirname(__file__),
@@ -37,6 +41,7 @@ def load_file(format_name: str):
 
 class TestOutputFileReading:
     """Simple tests for reading csv input files."""
+
     def test_if_module_supports_search_tool(self):
         """Test whether all software tools supported by the module are actually tested."""
         parse_settings = ParseSettingsBuilder(
