@@ -231,7 +231,7 @@ class SubcellprofileDOMLFQUIObjects:
             st.selectbox(
                 "Select metric to plot on x axis",
                 # TODO: parse these labels from the module
-                ["depth_id_total", "depth_profile_total"],
+                ["median_profile_reproducibility", "mean_complex_scatter"],
                 key=st.session_state[self.variables_subcelldomlfq.selectbox_id_uuid],
             )
         except Exception as e:
@@ -246,7 +246,7 @@ class SubcellprofileDOMLFQUIObjects:
             st.selectbox(
                 "Select metric to plot on y axis",
                 # TODO: parse these labels from the module
-                ["median_profile_reproducibility", "mean_complex_scatter"],
+                ["depth_id_total", "depth_profile_total"],
                 key=st.session_state[self.variables_subcelldomlfq.selectbox_id_uuid],
             )
         except Exception as e:
