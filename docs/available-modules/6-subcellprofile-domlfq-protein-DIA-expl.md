@@ -10,13 +10,14 @@ Users can load their data and inspect the results privately. They can also make 
 **This module is not designed to compare later-stages post-processing of quantitative data such as missing value replacement, and we advise users to publically upload data without replacement of missing values and without manual filtering.**
 
 We think that this module is more suited to evaluate the impact of (non exhaustive list):
--
+- Protein coverage across multiple divergent samples.
+- Label free protein quantification across very divergent samples where protein abundances below the quantification level are expected.
 
 Other modules will be more suited to explore further post-pocessing steps.
 
 ## Data set
 
-A subset of the Thermo Exploris 480 mass spectrometer (Thermo Fisher) data independent acquisition (DIA) data described by [Schessner et al., 2023](https://www.nature.com/articles/s41467-023-41000-7) was used as a benchmark dataset. Here, only the 18 runs from the short gradient series (named “20210131_EXPL4_ViAl_SA_HeLa_Evosep_21min_DIA_120k_15k_1-5*”) was used, including three technical replicates of 6 fractions derived from subcellular fractionation by centrifugation of HeLa cells.
+A subset of the Thermo Exploris 480 mass spectrometer (Thermo Fisher) data independent acquisition (DIA) data described by [Schessner et al., 2023](https://www.nature.com/articles/s41467-023-41000-7) was used as a benchmark dataset. Here, only the 18 runs from the short gradient series (named “20210131_EXPL4_ViAl_SA_HeLa_Evosep_21min_DIA_120k_15k_1-5*”) was used, including three biological replicates of 6 fractions derived from subcellular fractionation by differential centrifugation of HeLa cells.
 
 Please refer to the original publication for the full description of sample preparation and data acquisition parameters ([Schessner et al., 2023](https://www.nature.com/articles/s41467-023-41000-7).
 
@@ -46,14 +47,13 @@ Alternatively, you can download them from the ProteoBench server here: [proteobe
 **It is imperative not to rename the files once downloaded!**
 
 Download the zipped FASTA file here: <a href="https://datashare.biochem.mpg.de/s/IaZH252kMCs8yY2" download>FileShare</a>.
-The fasta file provided for this module contains human proteins and contaminant proteins
+The fasta file provided for this module contains canonical human proteins from the SwissProt database and contaminant proteins
 ([Frankenfield et al., JPR](https://pubs.acs.org/doi/10.1021/acs.jproteome.2c00145))
 
 ## Metric calculation
 
-For each precursor ion (modified sequence + charge), we calculate the sum of signal per raw file. Contaminant sequences flagged with the prefix "Cont_" in the fasta file are removed, as well as the peptide ions that match proteins from several species and the peptide ions that are not quantified in any raw file. When applicable, "0" are replaced by NAs and missing values are ignored.
-Then we log2-transform the values, and calculate the mean signal per condition, with the standard deviation and coefficient of variation (CV). For each precursor ion, we calculate the difference between the mean(log2) in A and B, and compare it to its expected value. The difference between measured and expected mean(log2) is called "epsilon".
-The total number of unique precursor ions is reported on the vertical axis, and the mean or median absolute epsilon is reported on the horizontal axis. Precursors matched to contaminant sequences and/or to multiple species are excluded for error calculation. More detailed description of how the data are handled before metrics calculation may be found in the tool-specific paragraphs below.
+Contaminant sequences flagged with the prefix "Cont_" in the fasta file are removed.
+Metric calculation is based on the benchmarks described in the paper associated with the raw data ([Schessner et al., 2023](https://www.nature.com/articles/s41467-023-41000-7). A more detailed description here will folow.
 
 ## How to use
 
@@ -119,8 +119,7 @@ After upload, you will get a link to a Github pull request associated with your 
 
 #### Troubleshooting:
 
-Since the Thermo DIA data .raw files were acquired using a staggered window approach it is highly recommended to convert and demultiplex the .RAW files first into .mzML using MSConvert.
-Detailed instructions for this process can be found [here](https://fragpipe.nesvilab.org/docs/tutorial_convert.html#convert-thermo-dia-raw-files-with-overlappingstaggered-windows).
+Since the gradients are only 21 minutes it might be beneficial to review settings related to retention time prediciton and alignment.
 
 
 ### Custom format
