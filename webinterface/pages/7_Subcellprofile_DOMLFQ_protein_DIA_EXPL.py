@@ -3,15 +3,15 @@ from typing import Any, Dict, Type
 
 import pages.texts.proteobench_builder as pbb
 import streamlit as st
-from pages.base_pages.quant import QuantUIObjects
+from pages.base_pages.subcellprofile_domlfq import SubcellprofileDOMLFQUIObjects
 from pages.pages_variables.subcellprofile.DOMLFQ.protein.DIA.EXPL.variables import (
     VariablesSubcellprofileDOMLFQ,
 )
 from pages.texts.generic_texts import WebpageTexts
 
 from proteobench.io.parsing.parse_settings import ParseSettingsBuilder
-from proteobench.modules.quant.lfq.ion.DIA.quant_lfq_ion_DIA_diaPASEF import (
-    DIAQuantIonModulediaPASEF,
+from proteobench.modules.subcellprofile.domlfq.protein.DIA.subcellprofile_domlfq_protein_DIA_EXPL import (
+    SubcellprofileDomlfqProteinDIAEXPLModule,
 )
 
 
@@ -29,12 +29,12 @@ class StreamlitUI:
             token = st.secrets["gh"]["token"]
         except KeyError:
             token = ""
-        self.ionmodule: DIAQuantIonModulediaPASEF = DIAQuantIonModulediaPASEF(token=token)
+        self.proteinmodule: SubcellprofileDomlfqProteinDIAEXPLModule = SubcellprofileDomlfqProteinDIAEXPLModule(token=token)
         self.parsesettingsbuilder = ParseSettingsBuilder(
-            module_id=self.ionmodule.module_id, parse_settings_dir=self.variables_subcell_domlfq.parse_settings_dir
+            module_id=self.proteinmodule.module_id, parse_settings_dir=self.variables_subcell_domlfq.parse_settings_dir
         )
 
-        self.quant_uiobjects = QuantUIObjects(self.variables_subcell_domlfq, self.ionmodule, self.parsesettingsbuilder)
+        self.subcelldomlfq_uiobjects = SubcellprofileDOMLFQUIObjects(self.variables_subcell_domlfq, self.proteinmodule, self.parsesettingsbuilder)
 
         self._main_page()
 
@@ -67,7 +67,7 @@ class StreamlitUI:
                 st.warning(
                     "This module is in BETA phase. The figure presented below and the metrics calculation may change in the near future."
                 )
-            self.quant_uiobjects.display_all_data_results_main()
+            self.subcelldomlfq_uiobjects.display_all_data_results_main()
 
         # Tab 2: Submission Details
         with tab_submission_details:
@@ -77,7 +77,7 @@ class StreamlitUI:
                 st.warning(
                     "This module is in BETA phase. The figure presented below and the metrics calculation may change in the near future."
                 )
-            self.quant_uiobjects.display_submission_form()
+            self.subcelldomlfq_uiobjects.display_submission_form()
 
         # Tab 2.5: in-depth plots current data
         with tab_indepth_plots:
@@ -87,7 +87,7 @@ class StreamlitUI:
                 st.warning(
                     "This module is in BETA phase. The figure presented below and the metrics calculation may change in the near future."
                 )
-            self.quant_uiobjects.generate_current_data_plots(True)
+            self.subcelldomlfq_uiobjects.generate_current_data_plots(True)
 
         # Tab 3: Results (New Submissions)
         with tab_results_new:
@@ -97,7 +97,7 @@ class StreamlitUI:
                 st.warning(
                     "This module is in BETA phase. The figure presented below and the metrics calculation may change in the near future."
                 )
-            self.quant_uiobjects.display_all_data_results_submitted()
+            self.subcelldomlfq_uiobjects.display_all_data_results_submitted()
 
         # Tab 4: Public Submission
         with tab_public_submission:
@@ -107,7 +107,7 @@ class StreamlitUI:
                 st.warning(
                     "This module is in BETA phase. The figure presented below and the metrics calculation may change in the near future."
                 )
-            self.quant_uiobjects.display_public_submission_ui()
+            self.subcelldomlfq_uiobjects.display_public_submission_ui()
 
 
 if __name__ == "__main__":
