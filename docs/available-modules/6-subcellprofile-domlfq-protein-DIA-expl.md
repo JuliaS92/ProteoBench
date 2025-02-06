@@ -10,7 +10,12 @@ Users can load their data and inspect the results privately. They can also make 
 **This module is not designed to compare later-stages post-processing of quantitative data such as missing value replacement, and we advise users to publically upload data without replacement of missing values and without manual filtering.**
 
 We think that this module is more suited to evaluate the impact of (non exhaustive list):
--
+- search engine identification
+- peak picking
+- match between run
+- low-level ion signal normalisation
+- protein inference
+- signal summarization from ions to protein groups
 
 Other modules will be more suited to explore further post-pocessing steps.
 
@@ -51,12 +56,11 @@ The fasta file provided for this module contains human proteins and contaminant 
 
 ## Metric calculation
 
-In this module, the performance of the workflow is evaluated on three metrics.
+In this module, the performance of the workflow is evaluated on these metrics:
 TBD: which proteins are used and why
 
 1) Profile depth: Number of proteins for which a profile could be calculated. Only proteins with 4 or more quantification values in **consecutive** runs are used.
-2) Reproducibility: Coefficients of Variation
-3) Complex scatter: Mean (?) of the mean (?) manhattan distance of protein profiles to the average (?) protein profile per complex
+2) Complex scatter: Mean (?) of the mean (?) manhattan distance of protein profiles to the average (?) protein profile per complex
 
 ## How to use
 
