@@ -1,7 +1,5 @@
 [mapper]
 "PG.ProteinGroups" = "Proteins"
-"R.FileName" = "Raw file"
-"PG.Quantity" = "Intensity"
 
 [condition_mapper]
 "20210131_EXPL4_ViAl_SA_HeLa_Evosep_21min_DIA_120k_15k_1-5_Map2_3K" = "Rep2_3K"
