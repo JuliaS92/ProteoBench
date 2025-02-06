@@ -34,9 +34,8 @@ def load_input_file(input_csv: str, input_format: str) -> pd.DataFrame:
         rename_header_to_file = dict()
         for column in input_data_frame.columns:
             if column.endswith(".PG.Quantity"):
-                rename_header_to_file[column] = \
-                    Path(column[:-len(".PG.Quantity")].split(" ", 1)[-1]).stem
-                
+                rename_header_to_file[column] = Path(column[: -len(".PG.Quantity")].split(" ", 1)[-1]).stem
+
         input_data_frame = input_data_frame.rename(columns=rename_header_to_file)
 
     return input_data_frame
