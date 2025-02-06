@@ -1,8 +1,8 @@
 # Subcellular profile DOM LFQ - protein level - DIA
 
-This module uses subcellular fractionation to assess the sensitivity and quantification accuracy for data acquired with data-independent acquisition (DIA) on a Thermo Exploris 480.
-This module is work in progress.
+This module uses subcellular fractionation to assess the sensitivity and quantification accuracy for data acquired with data-independent acquisition (DIA) on a Thermo Exploris 480. It is based on the assumption that proteins belonging to the same complex show the same quantification changes when comparing subcellular fractions. As an example: If protein A and protein B belong to the same complex, their percentual intensities should increase or decrease similarly between fraction 1 and fraction 2. In this module, we use the organellar mappings dataset from [Schessner et al., 2023](https://www.nature.com/articles/s41467-023-41000-7) that measured the protein quantities of human proteins in 6 subcellular fractions. The curve created by plotting the protein intensity (% of total intensity across all fractions) over all fractions is called a "protein profile", and only profiles with at least 4 consecutive points are taken into account.
 
+This module is work in progress.
 **We are working on the documentation: more information comming soon.**
 
 Users can load their data and inspect the results privately. They can also make their outputs public by providing the associated parameter file and submitting the benchmark run to ProteoBench. By doing so, their workflow output will be stored alongside all other benchmark runs in ProteoBench and will be accessible to the entire community.
