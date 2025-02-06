@@ -55,7 +55,10 @@ class SubcellprofileDOMLFQUIObjects:
     """
 
     def __init__(
-        self, variables_subcelldomlfq: VariablesSubcellprofileDOMLFQ, proteinmodule: ProteinModule, parsesettingsbuilder: ParseSettingsBuilder
+        self,
+        variables_subcelldomlfq: VariablesSubcellprofileDOMLFQ,
+        proteinmodule: ProteinModule,
+        parsesettingsbuilder: ParseSettingsBuilder,
     ) -> None:
         """Initializes the Streamlit UI objects for the subcellular profile DomLFQ modules."""
         self.variables_subcelldomlfq: VariablesSubcellprofileDOMLFQ = variables_subcelldomlfq
@@ -80,7 +83,9 @@ class SubcellprofileDOMLFQUIObjects:
             self.generate_input_fields()
             self.generate_additional_parameters_fields()
             st.markdown(self.variables_subcelldomlfq.texts.ShortMessages.run_instructions)
-            submit_button = st.form_submit_button("Parse and bench", help=self.variables_subcelldomlfq.texts.Help.parse_button)
+            submit_button = st.form_submit_button(
+                "Parse and bench", help=self.variables_subcelldomlfq.texts.Help.parse_button
+            )
 
         if submit_button:
             self.process_submission_form()
@@ -103,7 +108,9 @@ class SubcellprofileDOMLFQUIObjects:
         """Generates a text area input field."""
         placeholder = content.get("placeholder")
         if key in st.session_state[self.variables_subcelldomlfq.params_file_dict].keys():
-            value = st.session_state[self.variables_subcelldomlfq.params_file_dict].get(key)  # Get parsed value if available
+            value = st.session_state[self.variables_subcelldomlfq.params_file_dict].get(
+                key
+            )  # Get parsed value if available
         else:
             value = content.get("value", {}).get(input_format)
         height = content.get("height", 200)  # Default height if not specified
@@ -131,7 +138,9 @@ class SubcellprofileDOMLFQUIObjects:
         """Generates a text input field."""
         placeholder = content.get("placeholder")
         if key in st.session_state[self.variables_subcelldomlfq.params_file_dict].keys():
-            value = st.session_state[self.variables_subcelldomlfq.params_file_dict].get(key)  # Get parsed value if available
+            value = st.session_state[self.variables_subcelldomlfq.params_file_dict].get(
+                key
+            )  # Get parsed value if available
         else:
             value = content.get("value", {}).get(input_format)
 
@@ -148,7 +157,9 @@ class SubcellprofileDOMLFQUIObjects:
     def _generate_number_input(self, content: dict, key: str = "") -> Any:
         """Generates a number input field."""
         if key in st.session_state[self.variables_subcelldomlfq.params_file_dict].keys():
-            value = st.session_state[self.variables_subcelldomlfq.params_file_dict].get(key)  # Get parsed value if available
+            value = st.session_state[self.variables_subcelldomlfq.params_file_dict].get(
+                key
+            )  # Get parsed value if available
         else:
             value = content.get("value", {}).get("min_value")
         return st.number_input(
@@ -167,7 +178,9 @@ class SubcellprofileDOMLFQUIObjects:
         """Generates a selectbox input field."""
         options = content.get("options", [])
         if key in st.session_state[self.variables_subcelldomlfq.params_file_dict].keys():
-            value = st.session_state[self.variables_subcelldomlfq.params_file_dict].get(key)  # Get parsed value if available
+            value = st.session_state[self.variables_subcelldomlfq.params_file_dict].get(
+                key
+            )  # Get parsed value if available
         else:
             value = content.get("value", {}).get(input_format)
         index = options.index(value) if value in options else 0
@@ -238,7 +251,6 @@ class SubcellprofileDOMLFQUIObjects:
             )
         except Exception as e:
             st.error(f"Unable to create the selectbox: {e}", icon="🚨")
-
 
     def generate_submitted_selectbox(self) -> None:
         """Creates the selectbox for the Streamlit UI."""
@@ -428,7 +440,9 @@ class SubcellprofileDOMLFQUIObjects:
         """Initializes the all_datapoints variable in the session state."""
         if self.variables_subcelldomlfq.all_datapoints_submitted not in st.session_state.keys():
             st.session_state[self.variables_subcelldomlfq.all_datapoints_submitted] = None
-            st.session_state[self.variables_subcelldomlfq.all_datapoints_submitted] = self.proteinmodule.obtain_all_data_points(
+            st.session_state[
+                self.variables_subcelldomlfq.all_datapoints_submitted
+            ] = self.proteinmodule.obtain_all_data_points(
                 all_datapoints=st.session_state[self.variables_subcelldomlfq.all_datapoints_submitted]
             )
 
@@ -556,7 +570,9 @@ class SubcellprofileDOMLFQUIObjects:
     def clear_highlight_column(self) -> None:
         """Removes the highlight column from the submission data if it exists."""
         if "Highlight" in st.session_state[self.variables_subcelldomlfq.all_datapoints_submission].columns:
-            st.session_state[self.variables_subcelldomlfq.all_datapoints_submission].drop("Highlight", inplace=True, axis=1)
+            st.session_state[self.variables_subcelldomlfq.all_datapoints_submission].drop(
+                "Highlight", inplace=True, axis=1
+            )
 
     def create_pull_request(self, params: Any) -> Optional[str]:
         """Submits the pull request with the benchmark results and returns the PR URL."""
@@ -684,9 +700,9 @@ class SubcellprofileDOMLFQUIObjects:
         edits = st.session_state[st.session_state[self.variables_subcelldomlfq.table_id_uuid]]["edited_rows"].items()
         for k, v in edits:
             try:
-                st.session_state[self.variables_subcelldomlfq.all_datapoints_submitted][list(v.keys())[0]].iloc[k] = list(
-                    v.values()
-                )[0]
+                st.session_state[self.variables_subcelldomlfq.all_datapoints_submitted][list(v.keys())[0]].iloc[
+                    k
+                ] = list(v.values())[0]
             except TypeError:
                 return
         st.session_state[self.variables_subcelldomlfq.highlight_list_submitted] = list(
@@ -817,7 +833,9 @@ class SubcellprofileDOMLFQUIObjects:
             st.error(":x: Please provide a result file", icon="🚨")
             return False
 
-        st.session_state[self.variables_subcelldomlfq.result_perf] = st.session_state[self.variables_subcelldomlfq.result_perf][
+        st.session_state[self.variables_subcelldomlfq.result_perf] = st.session_state[
+            self.variables_subcelldomlfq.result_perf
+        ][
             st.session_state[self.variables_subcelldomlfq.result_perf]["nr_observed"]
             >= st.session_state[st.session_state[self.variables_subcelldomlfq.slider_id_uuid]]
         ]

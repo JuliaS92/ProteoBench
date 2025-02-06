@@ -29,12 +29,16 @@ class StreamlitUI:
             token = st.secrets["gh"]["token"]
         except KeyError:
             token = ""
-        self.proteinmodule: SubcellprofileDomlfqProteinDIAEXPLModule = SubcellprofileDomlfqProteinDIAEXPLModule(token=token)
+        self.proteinmodule: SubcellprofileDomlfqProteinDIAEXPLModule = SubcellprofileDomlfqProteinDIAEXPLModule(
+            token=token
+        )
         self.parsesettingsbuilder = ParseSettingsBuilder(
             module_id=self.proteinmodule.module_id, parse_settings_dir=self.variables_subcell_domlfq.parse_settings_dir
         )
 
-        self.subcelldomlfq_uiobjects = SubcellprofileDOMLFQUIObjects(self.variables_subcell_domlfq, self.proteinmodule, self.parsesettingsbuilder)
+        self.subcelldomlfq_uiobjects = SubcellprofileDOMLFQUIObjects(
+            self.variables_subcell_domlfq, self.proteinmodule, self.parsesettingsbuilder
+        )
 
         self._main_page()
 
