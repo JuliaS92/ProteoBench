@@ -35,6 +35,8 @@ class VariablesSubcellprofileDOMLFQ:
     github_link_pr: str = "github.com/Proteobot/Results_subcellprofile_DOMLFQ_protein_DIA_EXPL.git"
     selectbox_id_submitted_uuid: str = "selectbox_id_submitted_subcell_domlfq"
     selectbox_id_uuid: str = "selectbox_id_subcell_domlfq"
+    selectbox_x_axis_id_uuid: str = "selectbox_x_axis_id_subcell_domlfq"
+    selectbox_y_axis_id_uuid: str = "selectbox_y_axis_id_subcell_domlfq"
     slider_id_submitted_uuid: str = "slider_id_submitted_subcell_domlfq"
     slider_id_uuid: str = "slider_id_subcell_domlfq"
     download_selector_id_uuid: str = "download_selector_id_subcell_domlfq"

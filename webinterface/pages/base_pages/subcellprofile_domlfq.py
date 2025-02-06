@@ -194,14 +194,6 @@ class SubcellprofileDOMLFQUIObjects:
             ),
         )
 
-    def initialize_main_slider(self) -> None:
-        if self.variables_subcelldomlfq.slider_id_uuid not in st.session_state.keys():
-            st.session_state[self.variables_subcelldomlfq.slider_id_uuid] = uuid.uuid4()
-        if st.session_state[self.variables_subcelldomlfq.slider_id_uuid] not in st.session_state.keys():
-            st.session_state[
-                st.session_state[self.variables_subcelldomlfq.slider_id_uuid]
-            ] = self.variables_subcelldomlfq.default_val_slider
-
     def generate_main_selectbox(self) -> None:
         """Creates the selectbox for the Streamlit UI."""
         if self.variables_subcelldomlfq.selectbox_id_uuid not in st.session_state.keys():
@@ -216,6 +208,37 @@ class SubcellprofileDOMLFQUIObjects:
             )
         except Exception as e:
             st.error(f"Unable to create the selectbox: {e}", icon="🚨")
+
+    def generate_x_axis_selectbox(self) -> None:
+        """Creates the x axis selectbox for the Streamlit UI."""
+        if self.variables_subcelldomlfq.selectbox_x_axis_id_uuid not in st.session_state.keys():
+            st.session_state[self.variables_subcelldomlfq.selectbox_id_uuid] = uuid.uuid4()
+
+        try:
+            st.selectbox(
+                "Select metric to plot on x axis",
+                # TODO: parse these labels from the module
+                ["depth_id_total", "depth_profile_total"],
+                key=st.session_state[self.variables_subcelldomlfq.selectbox_id_uuid],
+            )
+        except Exception as e:
+            st.error(f"Unable to create the selectbox: {e}", icon="🚨")
+
+    def generate_y_axis_selectbox(self) -> None:
+        """Creates the x axis selectbox for the Streamlit UI."""
+        if self.variables_subcelldomlfq.selectbox_y_axis_id_uuid not in st.session_state.keys():
+            st.session_state[self.variables_subcelldomlfq.selectbox_id_uuid] = uuid.uuid4()
+
+        try:
+            st.selectbox(
+                "Select metric to plot on y axis",
+                # TODO: parse these labels from the module
+                ["median_profile_reproducibility", "mean_complex_scatter"],
+                key=st.session_state[self.variables_subcelldomlfq.selectbox_id_uuid],
+            )
+        except Exception as e:
+            st.error(f"Unable to create the selectbox: {e}", icon="🚨")
+
 
     def generate_submitted_selectbox(self) -> None:
         """Creates the selectbox for the Streamlit UI."""
@@ -854,20 +877,18 @@ class SubcellprofileDOMLFQUIObjects:
     def display_all_data_results_main(self) -> None:
         """Displays the results for all data in Tab 1."""
         st.title("Results (All Data)")
-        self.initialize_main_slider()
-        self.generate_main_slider()
         self.generate_main_selectbox()
+        self.generate_x_axis_selectbox()
+        self.generate_y_axis_selectbox()
         self.display_existing_results()
 
     def display_all_data_results_submitted(self) -> None:
         """Displays the results for all data in Tab 1."""
         st.title("Results (All Data)")
-        self.initialize_submitted_slider()
-        self.generate_submitted_slider()
         self.generate_submitted_selectbox()
         self.display_submitted_results()
 
 
 if __name__ == "__main__":
     logging.basicConfig(format="%(levelname)s:%(message)s", level=logging.INFO)
-    QuantUIObjects()
+    SubcellprofileDOMLFQUIObjects()
