@@ -57,7 +57,7 @@ class VariablesSubcellprofileDOMLFQ:
     placeholder_slider_submitted: str = "placeholder_slider_submitted_subcell_domlfq"
     highlight_list_submitted: List[str] = field(default_factory=list)
 
-    parse_settings_dir: str = "../proteobench/io/parsing/io_parse_settings/Quant/lfq/ion/DIA/AIF"
+    parse_settings_dir: str = "../proteobench/io/parsing/io_parse_settings/subcellprofile/domlfq/protein/DIA/"
 
     texts: Type[WebpageTexts] = WebpageTexts
     doc_url: str = (
