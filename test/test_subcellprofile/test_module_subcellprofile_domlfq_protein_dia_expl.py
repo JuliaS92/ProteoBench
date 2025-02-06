@@ -8,11 +8,15 @@ from proteobench.modules.subcellprofile.domlfq.protein.DIA.subcellprofile_domlfq
     SubcellprofileDomlfqProteinDIAEXPLModule,
 )
 
-TESTDATA_DIR = os.path.join(os.path.dirname(__file__), "../data/subcellprofile_domlfq_protein_DIA_EXPL")
+TESTDATA_DIR = os.path.join(os.path.dirname(__file__), "../data/subcellprofile")
 TESTDATA_FILES = {
-    "DIA-NN": os.path.join(TESTDATA_DIR, "DIA-NN_example_domlfq_report.pg_matrix.tsv"),
-    "FragPipe (DIA-NN quant)": os.path.join(TESTDATA_DIR, "FragPipe-DIA-NN_example_domlfq_report.pg_matrix.tsv"),
-    "AlphaDIA": os.path.join(TESTDATA_DIR, "AlphaDIA_example_domlfq_report.pg.matrix.tsv"),
+    "DIA-NN": os.path.join(TESTDATA_DIR, "TRIMMED_DIANN_1-9-2_report.pg_matrix.tsv"),
+    "FragPipe (DIA-NN quant)": os.path.join(TESTDATA_DIR, "TRIMMED_FragPipe_DIANNquant_2-0_report.pg_matrix.tsv"),
+    "AlphaDIA": os.path.join(TESTDATA_DIR, "TRIMMED_AlphaDIA_1-9-2_pg.matrix.tsv"),
+    "Spectronaut": os.path.join(
+        TESTDATA_DIR,
+        "TRIMMED_Spectronaut_19-5_20250130_154210_Proteobench-newdataset_DIA_Exploris_compartiments_ProteinPivot_Report.tsv",
+    ),
 }
 
 class TestSubcellprofileDomlfqProteinDIAEXPLModule:
