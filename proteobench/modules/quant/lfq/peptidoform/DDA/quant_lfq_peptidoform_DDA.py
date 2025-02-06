@@ -1,3 +1,7 @@
+"""
+DDA Quantification Module for Peptidoform level Quantification.
+"""
+
 from __future__ import annotations
 
 import os
@@ -23,7 +27,22 @@ from proteobench.score.quant.quantscores import QuantScores
 
 
 class DDAQuantPeptidoformModule(QuantModule):
-    """DDA Quantification Module for Peptidoform level Quantification."""
+    """
+    DDA Quantification Module for Peptidoform level Quantification.
+
+    Parameters
+    ----------
+    token : str
+        GitHub token for the user.
+    proteobot_repo_name : str, optional
+        Repository for pull requests and adding new points, by default "Proteobot/Results_quant_peptidoform_DDA".
+    proteobench_repo_name : str, optional
+        Repository for storing benchmarking results, by default "Proteobench/Results_quant_peptidoform_DDA".
+    parse_settings_dir : str, optional
+        Directory containing parsing settings, by default it is set to the appropriate path.
+    module_id : str, optional
+        The module identifier for configuration, by default "quant_lfq_peptidoform_DDA".
+    """
 
     def __init__(
         self,
@@ -50,14 +69,20 @@ class DDAQuantPeptidoformModule(QuantModule):
         module_id: str = "quant_lfq_peptidoform_DDA",
     ):
         """
-        DDA Quantification Module for Peptidoform level Quantification.
+        Initialize the DDA Quantification Module for Peptidoform level Quantification.
 
-        Args:
-            token (str): GitHub token for the user.
-            proteobot_repo_name (str): Repository for pull requests and adding new points.
-            proteobench_repo_name (str): Repository for storing benchmarking results.
-            parse_settings_dir (str): Directory containing parsing settings.
-            module_id (str): Module identifier for configuration.
+        Parameters
+        ----------
+        token : str
+            GitHub token for the user.
+        proteobot_repo_name : str, optional
+            Repository for pull requests and adding new points, by default "Proteobot/Results_quant_peptidoform_DDA".
+        proteobench_repo_name : str, optional
+            Repository for storing benchmarking results, by default "Proteobench/Results_quant_peptidoform_DDA".
+        parse_settings_dir : str, optional
+            Directory containing parsing settings, by default it is set to the appropriate path.
+        module_id : str, optional
+            Module identifier for configuration, by default "quant_lfq_peptidoform_DDA".
         """
         super().__init__(
             token,
@@ -70,7 +95,14 @@ class DDAQuantPeptidoformModule(QuantModule):
         self.module_id = module_id
 
     def is_implemented(self) -> bool:
-        """Returns whether the module is fully implemented."""
+        """
+        Return whether the module is fully implemented.
+
+        Returns
+        -------
+        bool
+            Whether the module is fully implemented.
+        """
         return False
 
     def benchmarking(
@@ -84,15 +116,23 @@ class DDAQuantPeptidoformModule(QuantModule):
         """
         Main workflow of the module for benchmarking workflow results.
 
-        Args:
-            input_file (str): Path to the workflow output file.
-            input_format (str): Format of the workflow output file.
-            user_input (dict): User-provided parameters for plotting.
-            all_datapoints (Optional[pd.DataFrame]): DataFrame containing all data points from the repo.
-            default_cutoff_min_prec (int, optional): Minimum number of runs an ion must be identified in. Defaults to 3.
+        Parameters
+        ----------
+        input_file : str
+            Path to the workflow output file.
+        input_format : str
+            Format of the workflow output file.
+        user_input : dict
+            User-provided parameters for plotting.
+        all_datapoints : Optional[pd.DataFrame]
+            DataFrame containing all data points from the repo.
+        default_cutoff_min_prec : int, optional
+            Minimum number of runs an ion must be identified in. Defaults to 3.
 
-        Returns:
-            Tuple[DataFrame, DataFrame, DataFrame]: A tuple containing the intermediate data structure, all data points, and the input DataFrame.
+        Returns
+        -------
+        Tuple[DataFrame, DataFrame, DataFrame]
+            A tuple containing the intermediate data structure, all data points, and the input DataFrame.
         """
         # Parse workflow output file
         try:
