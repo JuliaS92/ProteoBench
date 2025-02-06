@@ -71,16 +71,16 @@ class SubcellprofileDOMLFQUIObjects:
         st.session_state[self.variables_subcelldomlfq.submit] = False
         self.stop_duplicating = False
 
-        if self.variables_quant.params_file_dict not in st.session_state.keys():
-            st.session_state[self.variables_quant.params_file_dict] = dict()
+        if self.variables_subcelldomlfq.params_file_dict not in st.session_state.keys():
+            st.session_state[self.variables_subcelldomlfq.params_file_dict] = dict()
 
     def display_submission_form(self) -> None:
         """Creates the main submission form for the Streamlit UI."""
         with st.form(key="main_form"):
             self.generate_input_fields()
             self.generate_additional_parameters_fields()
-            st.markdown(self.variables_quant.texts.ShortMessages.run_instructions)
-            submit_button = st.form_submit_button("Parse and bench", help=self.variables_quant.texts.Help.parse_button)
+            st.markdown(self.variables_subcelldomlfq.texts.ShortMessages.run_instructions)
+            submit_button = st.form_submit_button("Parse and bench", help=self.variables_subcelldomlfq.texts.Help.parse_button)
 
         if submit_button:
             self.process_submission_form()
@@ -102,19 +102,19 @@ class SubcellprofileDOMLFQUIObjects:
     def _generate_text_area(self, input_format: str, content: dict, key: str = "") -> Any:
         """Generates a text area input field."""
         placeholder = content.get("placeholder")
-        if key in st.session_state[self.variables_quant.params_file_dict].keys():
-            value = st.session_state[self.variables_quant.params_file_dict].get(key)  # Get parsed value if available
+        if key in st.session_state[self.variables_subcelldomlfq.params_file_dict].keys():
+            value = st.session_state[self.variables_subcelldomlfq.params_file_dict].get(key)  # Get parsed value if available
         else:
             value = content.get("value", {}).get(input_format)
         height = content.get("height", 200)  # Default height if not specified
         return st.text_area(
             content["label"],
             placeholder=placeholder,
-            key=self.variables_quant.prefix_params + key,
+            key=self.variables_subcelldomlfq.prefix_params + key,
             value=value,
             height=height,
             on_change=self.update_parameters_submission_form(
-                key, st.session_state.get(self.variables_quant.prefix_params + key, 0)
+                key, st.session_state.get(self.variables_subcelldomlfq.prefix_params + key, 0)
             ),
         )
 
@@ -122,52 +122,52 @@ class SubcellprofileDOMLFQUIObjects:
 
     def update_parameters_submission_form(self, field, value) -> None:
         try:
-            st.session_state[self.variables_quant.params_json_dict][field] = value
+            st.session_state[self.variables_subcelldomlfq.params_json_dict][field] = value
         except KeyError:
-            st.session_state[self.variables_quant.params_json_dict] = {}
-            st.session_state[self.variables_quant.params_json_dict][field] = value
+            st.session_state[self.variables_subcelldomlfq.params_json_dict] = {}
+            st.session_state[self.variables_subcelldomlfq.params_json_dict][field] = value
 
     def _generate_text_input(self, input_format: str, content: dict, key: str = "") -> Any:
         """Generates a text input field."""
         placeholder = content.get("placeholder")
-        if key in st.session_state[self.variables_quant.params_file_dict].keys():
-            value = st.session_state[self.variables_quant.params_file_dict].get(key)  # Get parsed value if available
+        if key in st.session_state[self.variables_subcelldomlfq.params_file_dict].keys():
+            value = st.session_state[self.variables_subcelldomlfq.params_file_dict].get(key)  # Get parsed value if available
         else:
             value = content.get("value", {}).get(input_format)
 
         return st.text_input(
             content["label"],
             placeholder=placeholder,
-            key=self.variables_quant.prefix_params + key,
+            key=self.variables_subcelldomlfq.prefix_params + key,
             value=value,
             on_change=self.update_parameters_submission_form(
-                key, st.session_state.get(self.variables_quant.prefix_params + key, 0)
+                key, st.session_state.get(self.variables_subcelldomlfq.prefix_params + key, 0)
             ),
         )
 
     def _generate_number_input(self, content: dict, key: str = "") -> Any:
         """Generates a number input field."""
-        if key in st.session_state[self.variables_quant.params_file_dict].keys():
-            value = st.session_state[self.variables_quant.params_file_dict].get(key)  # Get parsed value if available
+        if key in st.session_state[self.variables_subcelldomlfq.params_file_dict].keys():
+            value = st.session_state[self.variables_subcelldomlfq.params_file_dict].get(key)  # Get parsed value if available
         else:
             value = content.get("value", {}).get("min_value")
         return st.number_input(
             content["label"],
             value=value,
-            key=self.variables_quant.prefix_params + key,
+            key=self.variables_subcelldomlfq.prefix_params + key,
             format=content["format"],
             min_value=content["min_value"],
             max_value=content["max_value"],
             on_change=self.update_parameters_submission_form(
-                key, st.session_state.get(self.variables_quant.prefix_params + key, 0)
+                key, st.session_state.get(self.variables_subcelldomlfq.prefix_params + key, 0)
             ),
         )
 
     def _generate_selectbox(self, input_format: str, content: dict, key: str = "") -> Any:
         """Generates a selectbox input field."""
         options = content.get("options", [])
-        if key in st.session_state[self.variables_quant.params_file_dict].keys():
-            value = st.session_state[self.variables_quant.params_file_dict].get(key)  # Get parsed value if available
+        if key in st.session_state[self.variables_subcelldomlfq.params_file_dict].keys():
+            value = st.session_state[self.variables_subcelldomlfq.params_file_dict].get(key)  # Get parsed value if available
         else:
             value = content.get("value", {}).get(input_format)
         index = options.index(value) if value in options else 0
@@ -175,10 +175,10 @@ class SubcellprofileDOMLFQUIObjects:
         return st.selectbox(
             content["label"],
             options,
-            key=self.variables_quant.prefix_params + key,
+            key=self.variables_subcelldomlfq.prefix_params + key,
             index=index,
             on_change=self.update_parameters_submission_form(
-                key, st.session_state.get(self.variables_quant.prefix_params + key, 0)
+                key, st.session_state.get(self.variables_subcelldomlfq.prefix_params + key, 0)
             ),
         )
 
@@ -187,57 +187,57 @@ class SubcellprofileDOMLFQUIObjects:
         # value = content.get("value", {}).get(input_format, False)
         return st.checkbox(
             content["label"],
-            key=self.variables_quant.prefix_params + key,
+            key=self.variables_subcelldomlfq.prefix_params + key,
             value=False,
             on_change=self.update_parameters_submission_form(
-                key, st.session_state.get(self.variables_quant.prefix_params + key, 0)
+                key, st.session_state.get(self.variables_subcelldomlfq.prefix_params + key, 0)
             ),
         )
 
     def initialize_main_slider(self) -> None:
-        if self.variables_quant.slider_id_uuid not in st.session_state.keys():
-            st.session_state[self.variables_quant.slider_id_uuid] = uuid.uuid4()
-        if st.session_state[self.variables_quant.slider_id_uuid] not in st.session_state.keys():
+        if self.variables_subcelldomlfq.slider_id_uuid not in st.session_state.keys():
+            st.session_state[self.variables_subcelldomlfq.slider_id_uuid] = uuid.uuid4()
+        if st.session_state[self.variables_subcelldomlfq.slider_id_uuid] not in st.session_state.keys():
             st.session_state[
-                st.session_state[self.variables_quant.slider_id_uuid]
-            ] = self.variables_quant.default_val_slider
+                st.session_state[self.variables_subcelldomlfq.slider_id_uuid]
+            ] = self.variables_subcelldomlfq.default_val_slider
 
     def generate_main_selectbox(self) -> None:
         """Creates the selectbox for the Streamlit UI."""
-        if self.variables_quant.selectbox_id_uuid not in st.session_state.keys():
-            st.session_state[self.variables_quant.selectbox_id_uuid] = uuid.uuid4()
+        if self.variables_subcelldomlfq.selectbox_id_uuid not in st.session_state.keys():
+            st.session_state[self.variables_subcelldomlfq.selectbox_id_uuid] = uuid.uuid4()
 
         try:
             # TODO: Other labels based on different modules, e.g. mass tolerances are less relevant for DIA
             st.selectbox(
                 "Select label to plot",
                 ["None", "precursor_mass_tolerance", "fragment_mass_tolerance", "enable_match_between_runs"],
-                key=st.session_state[self.variables_quant.selectbox_id_uuid],
+                key=st.session_state[self.variables_subcelldomlfq.selectbox_id_uuid],
             )
         except Exception as e:
             st.error(f"Unable to create the selectbox: {e}", icon="🚨")
 
     def generate_submitted_selectbox(self) -> None:
         """Creates the selectbox for the Streamlit UI."""
-        if self.variables_quant.selectbox_id_submitted_uuid not in st.session_state.keys():
-            st.session_state[self.variables_quant.selectbox_id_submitted_uuid] = uuid.uuid4()
+        if self.variables_subcelldomlfq.selectbox_id_submitted_uuid not in st.session_state.keys():
+            st.session_state[self.variables_subcelldomlfq.selectbox_id_submitted_uuid] = uuid.uuid4()
 
         try:
             st.selectbox(
                 "Select label to plot",
                 ["None", "precursor_mass_tolerance", "fragment_mass_tolerance"],
-                key=st.session_state[self.variables_quant.selectbox_id_submitted_uuid],
+                key=st.session_state[self.variables_subcelldomlfq.selectbox_id_submitted_uuid],
             )
         except Exception as e:
             st.error(f"Unable to create the selectbox: {e}", icon="🚨")
 
     def initialize_submitted_slider(self) -> None:
-        if self.variables_quant.slider_id_submitted_uuid not in st.session_state.keys():
-            st.session_state[self.variables_quant.slider_id_submitted_uuid] = uuid.uuid4()
-        if st.session_state[self.variables_quant.slider_id_submitted_uuid] not in st.session_state.keys():
+        if self.variables_subcelldomlfq.slider_id_submitted_uuid not in st.session_state.keys():
+            st.session_state[self.variables_subcelldomlfq.slider_id_submitted_uuid] = uuid.uuid4()
+        if st.session_state[self.variables_subcelldomlfq.slider_id_submitted_uuid] not in st.session_state.keys():
             st.session_state[
-                st.session_state[self.variables_quant.slider_id_submitted_uuid]
-            ] = self.variables_quant.default_val_slider
+                st.session_state[self.variables_subcelldomlfq.slider_id_submitted_uuid]
+            ] = self.variables_subcelldomlfq.default_val_slider
 
     def display_submitted_results(self) -> None:
         """Displays the results section of the page for submitted data."""
@@ -262,16 +262,16 @@ class SubcellprofileDOMLFQUIObjects:
             fig_metric = PlotDataPoint.plot_metric(
                 data_points_filtered,
                 metric=metric,
-                label=st.session_state[st.session_state[self.variables_quant.selectbox_id_submitted_uuid]],
+                label=st.session_state[st.session_state[self.variables_subcelldomlfq.selectbox_id_submitted_uuid]],
             )
             st.plotly_chart(fig_metric, use_container_width=True)
         except Exception as e:
             st.error(f"Unable to plot the datapoints: {e}", icon="🚨")
 
-        st.session_state[self.variables_quant.table_id_uuid] = uuid.uuid4()
+        st.session_state[self.variables_subcelldomlfq.table_id_uuid] = uuid.uuid4()
         st.data_editor(
-            st.session_state[self.variables_quant.all_datapoints_submitted],
-            key=st.session_state[self.variables_quant.table_id_uuid],
+            st.session_state[self.variables_subcelldomlfq.all_datapoints_submitted],
+            key=st.session_state[self.variables_subcelldomlfq.table_id_uuid],
             on_change=self.handle_submitted_table_edits,
         )
 
@@ -297,7 +297,7 @@ class SubcellprofileDOMLFQUIObjects:
         try:
             fig_metric = PlotDataPoint.plot_metric(
                 data_points_filtered,
-                label=st.session_state[st.session_state[self.variables_quant.selectbox_id_uuid]],
+                label=st.session_state[st.session_state[self.variables_subcelldomlfq.selectbox_id_uuid]],
                 metric=metric,
             )
             st.plotly_chart(fig_metric, use_container_width=True)
@@ -309,7 +309,7 @@ class SubcellprofileDOMLFQUIObjects:
 
     def submit_to_repository(self, params) -> Optional[str]:
         """Handles the submission process of the benchmark results to the ProteoBench repository."""
-        st.session_state[self.variables_quant.submit] = True
+        st.session_state[self.variables_subcelldomlfq.submit] = True
         button_pressed = self.generate_submission_button()  # None or 'button_pressed'
 
         if not button_pressed:  # if button_pressed is None
@@ -325,15 +325,15 @@ class SubcellprofileDOMLFQUIObjects:
 
     def show_submission_success_message(self, pr_url) -> None:
         """Handles the UI updates and notifications after a successful submission."""
-        if st.session_state[self.variables_quant.submit]:
+        if st.session_state[self.variables_subcelldomlfq.submit]:
             st.subheader("SUCCESS")
-            st.markdown(self.variables_quant.texts.ShortMessages.submission_processing_warning)
+            st.markdown(self.variables_subcelldomlfq.texts.ShortMessages.submission_processing_warning)
             try:
                 st.write(f"Follow your submission approval here: [{pr_url}]({pr_url})")
             except UnboundLocalError:
                 pass
 
-            st.session_state[self.variables_quant.submit] = False
+            st.session_state[self.variables_subcelldomlfq.submit] = False
             rain(emoji="🎈", font_size=54, falling_speed=5, animation_length=1)
 
     def generate_submission_ui_elements(self) -> None:
@@ -351,21 +351,21 @@ class SubcellprofileDOMLFQUIObjects:
     def generate_input_fields(self) -> None:
         """Creates the input section of the form."""
         st.subheader("Input files")
-        st.markdown(open(self.variables_quant.description_input_file_md, "r").read())
+        st.markdown(open(self.variables_subcelldomlfq.description_input_file_md, "r").read())
         self.user_input["input_format"] = st.selectbox(
             "Software tool",
             self.parsesettingsbuilder.INPUT_FORMATS,
-            help=self.variables_quant.texts.Help.input_format,
+            help=self.variables_subcelldomlfq.texts.Help.input_format,
         )
         self.user_input["input_csv"] = st.file_uploader(
-            "Software tool result file", help=self.variables_quant.texts.Help.input_file
+            "Software tool result file", help=self.variables_subcelldomlfq.texts.Help.input_file
         )
 
     # TODO: change additional_params_json for other modules, to capture relevant parameters
     def generate_additional_parameters_fields(self) -> None:
         """Creates the additional parameters section of the form and initializes the parameter fields."""
-        st.markdown(self.variables_quant.texts.ShortMessages.initial_parameters)
-        with open(self.variables_quant.additional_params_json) as file:
+        st.markdown(self.variables_subcelldomlfq.texts.ShortMessages.initial_parameters)
+        with open(self.variables_subcelldomlfq.additional_params_json) as file:
             config = json.load(file)
         for key, value in config.items():
             if key == "comments_for_plotting":
@@ -395,117 +395,117 @@ class SubcellprofileDOMLFQUIObjects:
 
     def initialize_main_data_points(self) -> None:
         """Initializes the all_datapoints variable in the session state."""
-        if self.variables_quant.all_datapoints not in st.session_state.keys():
-            st.session_state[self.variables_quant.all_datapoints] = None
-            st.session_state[self.variables_quant.all_datapoints] = self.ionmodule.obtain_all_data_points(
-                all_datapoints=st.session_state[self.variables_quant.all_datapoints]
+        if self.variables_subcelldomlfq.all_datapoints not in st.session_state.keys():
+            st.session_state[self.variables_subcelldomlfq.all_datapoints] = None
+            st.session_state[self.variables_subcelldomlfq.all_datapoints] = self.proteinmodule.obtain_all_data_points(
+                all_datapoints=st.session_state[self.variables_subcelldomlfq.all_datapoints]
             )
 
     def initialize_submitted_data_points(self) -> None:
         """Initializes the all_datapoints variable in the session state."""
-        if self.variables_quant.all_datapoints_submitted not in st.session_state.keys():
-            st.session_state[self.variables_quant.all_datapoints_submitted] = None
-            st.session_state[self.variables_quant.all_datapoints_submitted] = self.ionmodule.obtain_all_data_points(
-                all_datapoints=st.session_state[self.variables_quant.all_datapoints_submitted]
+        if self.variables_subcelldomlfq.all_datapoints_submitted not in st.session_state.keys():
+            st.session_state[self.variables_subcelldomlfq.all_datapoints_submitted] = None
+            st.session_state[self.variables_subcelldomlfq.all_datapoints_submitted] = self.proteinmodule.obtain_all_data_points(
+                all_datapoints=st.session_state[self.variables_subcelldomlfq.all_datapoints_submitted]
             )
 
     def filter_data_main_slider(self) -> None:
         """Filters the data points based on the slider value."""
-        if self.variables_quant.slider_id_uuid in st.session_state.keys():
-            return self.ionmodule.filter_data_point(
-                st.session_state[self.variables_quant.all_datapoints],
-                st.session_state[st.session_state[self.variables_quant.slider_id_uuid]],
+        if self.variables_subcelldomlfq.slider_id_uuid in st.session_state.keys():
+            return self.proteinmodule.filter_data_point(
+                st.session_state[self.variables_subcelldomlfq.all_datapoints],
+                st.session_state[st.session_state[self.variables_subcelldomlfq.slider_id_uuid]],
             )
 
     def filter_data_submitted_slider(self) -> None:
         """Filters the data points based on the slider value."""
         if (
-            self.variables_quant.slider_id_submitted_uuid in st.session_state.keys()
-            and self.variables_quant.all_datapoints_submitted in st.session_state.keys()
+            self.variables_subcelldomlfq.slider_id_submitted_uuid in st.session_state.keys()
+            and self.variables_subcelldomlfq.all_datapoints_submitted in st.session_state.keys()
         ):
-            return self.ionmodule.filter_data_point(
-                st.session_state[self.variables_quant.all_datapoints_submitted],
-                st.session_state[st.session_state[self.variables_quant.slider_id_submitted_uuid]],
+            return self.proteinmodule.filter_data_point(
+                st.session_state[self.variables_subcelldomlfq.all_datapoints_submitted],
+                st.session_state[st.session_state[self.variables_subcelldomlfq.slider_id_submitted_uuid]],
             )
 
     def set_highlight_column_in_submitted_data(self) -> None:
         """Initializes the highlight column in the data points."""
-        df = st.session_state[self.variables_quant.all_datapoints_submitted]
+        df = st.session_state[self.variables_subcelldomlfq.all_datapoints_submitted]
         if (
-            self.variables_quant.highlight_list_submitted not in st.session_state.keys()
+            self.variables_subcelldomlfq.highlight_list_submitted not in st.session_state.keys()
             and "Highlight" not in df.columns
         ):
             df.insert(0, "Highlight", [False] * len(df.index))
         elif "Highlight" not in df.columns:
-            df.insert(0, "Highlight", st.session_state[self.variables_quant.highlight_list_submitted])
+            df.insert(0, "Highlight", st.session_state[self.variables_subcelldomlfq.highlight_list_submitted])
         elif "Highlight" in df.columns:
             # Not sure how 'Highlight' column became object dtype
             df["Highlight"] = df["Highlight"].astype(bool).fillna(False)
         # only needed for last elif, but to be sure apply always:
-        st.session_state[self.variables_quant.all_datapoints_submitted] = df
+        st.session_state[self.variables_subcelldomlfq.all_datapoints_submitted] = df
 
     def generate_main_slider(self) -> None:
         """Creates a slider input."""
-        if self.variables_quant.slider_id_uuid not in st.session_state:
-            st.session_state[self.variables_quant.slider_id_uuid] = uuid.uuid4()
-        slider_key = st.session_state[self.variables_quant.slider_id_uuid]
+        if self.variables_subcelldomlfq.slider_id_uuid not in st.session_state:
+            st.session_state[self.variables_subcelldomlfq.slider_id_uuid] = uuid.uuid4()
+        slider_key = st.session_state[self.variables_subcelldomlfq.slider_id_uuid]
 
-        st.markdown(open(self.variables_quant.description_slider_md, "r").read())
+        st.markdown(open(self.variables_subcelldomlfq.description_slider_md, "r").read())
 
         st.select_slider(
             label="Minimal ion quantifications (# samples)",
             options=[1, 2, 3, 4, 5, 6],
-            value=st.session_state.get(slider_key, self.variables_quant.default_val_slider),
+            value=st.session_state.get(slider_key, self.variables_subcelldomlfq.default_val_slider),
             key=slider_key,
         )
 
     def generate_submitted_slider(self) -> None:
         """Creates a slider input."""
-        if self.variables_quant.slider_id_submitted_uuid not in st.session_state:
-            st.session_state[self.variables_quant.slider_id_submitted_uuid] = uuid.uuid4()
-        slider_key = st.session_state[self.variables_quant.slider_id_submitted_uuid]
+        if self.variables_subcelldomlfq.slider_id_submitted_uuid not in st.session_state:
+            st.session_state[self.variables_subcelldomlfq.slider_id_submitted_uuid] = uuid.uuid4()
+        slider_key = st.session_state[self.variables_subcelldomlfq.slider_id_submitted_uuid]
 
-        st.markdown(open(self.variables_quant.description_slider_md, "r").read())
+        st.markdown(open(self.variables_subcelldomlfq.description_slider_md, "r").read())
 
         st.select_slider(
             label="Minimal ion quantifications (# samples)",
             options=[1, 2, 3, 4, 5, 6],
-            value=st.session_state.get(slider_key, self.variables_quant.default_val_slider),
+            value=st.session_state.get(slider_key, self.variables_subcelldomlfq.default_val_slider),
             key=slider_key,
         )
 
     def display_download_section(self, reset_uuid=False) -> None:
         """Render the selector and area for raw data download."""
-        if len(st.session_state[self.variables_quant.all_datapoints]) == 0:
+        if len(st.session_state[self.variables_subcelldomlfq.all_datapoints]) == 0:
             st.error("No data available for download.", icon="🚨")
             return
 
-        downloads_df = st.session_state[self.variables_quant.all_datapoints][["id", "intermediate_hash"]]
+        downloads_df = st.session_state[self.variables_subcelldomlfq.all_datapoints][["id", "intermediate_hash"]]
         downloads_df.set_index("intermediate_hash", drop=False, inplace=True)
 
-        if self.variables_quant.placeholder_downloads_container not in st.session_state.keys() or reset_uuid:
-            st.session_state[self.variables_quant.placeholder_downloads_container] = st.empty()
-            st.session_state[self.variables_quant.download_selector_id_uuid] = uuid.uuid4()
+        if self.variables_subcelldomlfq.placeholder_downloads_container not in st.session_state.keys() or reset_uuid:
+            st.session_state[self.variables_subcelldomlfq.placeholder_downloads_container] = st.empty()
+            st.session_state[self.variables_subcelldomlfq.download_selector_id_uuid] = uuid.uuid4()
 
-        with st.session_state[self.variables_quant.placeholder_downloads_container].container(border=True):
+        with st.session_state[self.variables_subcelldomlfq.placeholder_downloads_container].container(border=True):
             st.subheader("Download raw datasets")
 
             st.selectbox(
                 "Select dataset",
                 downloads_df["intermediate_hash"],
                 index=None,
-                key=st.session_state[self.variables_quant.download_selector_id_uuid],
+                key=st.session_state[self.variables_subcelldomlfq.download_selector_id_uuid],
                 format_func=lambda x: downloads_df["id"][x],
             )
 
             if (
-                st.session_state[st.session_state[self.variables_quant.download_selector_id_uuid]] != None
+                st.session_state[st.session_state[self.variables_subcelldomlfq.download_selector_id_uuid]] != None
                 and st.secrets["storage"]["dir"] != None
             ):
                 dataset_path = (
                     st.secrets["storage"]["dir"]
                     + "/"
-                    + st.session_state[st.session_state[self.variables_quant.download_selector_id_uuid]]
+                    + st.session_state[st.session_state[self.variables_subcelldomlfq.download_selector_id_uuid]]
                 )
                 if os.path.isdir(dataset_path):
                     files = os.listdir(dataset_path)
@@ -518,12 +518,12 @@ class SubcellprofileDOMLFQUIObjects:
 
     def generate_submission_button(self) -> Optional[str]:
         """Creates a button for public submission and returns the PR URL if the button is pressed."""
-        if self.variables_quant.button_submission_uuid not in st.session_state.keys():
+        if self.variables_subcelldomlfq.button_submission_uuid not in st.session_state.keys():
             button_submission_uuid = uuid.uuid4()
-            st.session_state[self.variables_quant.button_submission_uuid] = button_submission_uuid
+            st.session_state[self.variables_subcelldomlfq.button_submission_uuid] = button_submission_uuid
 
         submit_pr = st.button(
-            "I really want to upload it", key=st.session_state[self.variables_quant.button_submission_uuid]
+            "I really want to upload it", key=st.session_state[self.variables_subcelldomlfq.button_submission_uuid]
         )
         if not submit_pr:
             return None
@@ -532,8 +532,8 @@ class SubcellprofileDOMLFQUIObjects:
 
     def clear_highlight_column(self) -> None:
         """Removes the highlight column from the submission data if it exists."""
-        if "Highlight" in st.session_state[self.variables_quant.all_datapoints_submission].columns:
-            st.session_state[self.variables_quant.all_datapoints_submission].drop("Highlight", inplace=True, axis=1)
+        if "Highlight" in st.session_state[self.variables_subcelldomlfq.all_datapoints_submission].columns:
+            st.session_state[self.variables_subcelldomlfq.all_datapoints_submission].drop("Highlight", inplace=True, axis=1)
 
     def create_pull_request(self, params: Any) -> Optional[str]:
         """Submits the pull request with the benchmark results and returns the PR URL."""
@@ -542,10 +542,10 @@ class SubcellprofileDOMLFQUIObjects:
         changed_params_str = compare_dictionaries(self.params_file_dict_copy, params.__dict__)
 
         try:
-            pr_url = self.ionmodule.clone_pr(
-                st.session_state[self.variables_quant.all_datapoints_submission],
+            pr_url = self.proteinmodule.clone_pr(
+                st.session_state[self.variables_subcelldomlfq.all_datapoints_submission],
                 params,
-                remote_git=self.variables_quant.github_link_pr,
+                remote_git=self.variables_subcelldomlfq.github_link_pr,
                 submission_comments=user_comments + "\n" + changed_params_str,
             )
         except Exception as e:
@@ -553,15 +553,15 @@ class SubcellprofileDOMLFQUIObjects:
             pr_url = None
 
         if not pr_url:
-            del st.session_state[self.variables_quant.submit]
+            del st.session_state[self.variables_subcelldomlfq.submit]
 
         return pr_url
 
     def save_intermediate_submission_data(self) -> None:
         """Stores intermediate and input data to the storage directory if available."""
         _id = str(
-            st.session_state[self.variables_quant.all_datapoints_submission][
-                st.session_state[self.variables_quant.all_datapoints_submission]["old_new"] == "new"
+            st.session_state[self.variables_subcelldomlfq.all_datapoints_submission][
+                st.session_state[self.variables_subcelldomlfq.all_datapoints_submission]["old_new"] == "new"
             ].iloc[-1, :]["intermediate_hash"]
         )
 
@@ -569,35 +569,35 @@ class SubcellprofileDOMLFQUIObjects:
 
         if "storage" in st.secrets.keys():
             logger.info("Save intermediate raw")
-            self.ionmodule.write_intermediate_raw(
+            self.proteinmodule.write_intermediate_raw(
                 dir=st.secrets["storage"]["dir"],
                 ident=_id,
                 input_file_obj=self.user_input["input_csv"],
-                result_performance=st.session_state[self.variables_quant.result_performance_submission],
-                param_loc=self.user_input[self.variables_quant.meta_data],
-                comment=st.session_state[self.variables_quant.meta_data_text],
+                result_performance=st.session_state[self.variables_subcelldomlfq.result_performance_submission],
+                param_loc=self.user_input[self.variables_subcelldomlfq.meta_data],
+                comment=st.session_state[self.variables_subcelldomlfq.meta_data_text],
             )
 
     def copy_dataframes_for_submission(self) -> None:
         """Creates copies of the dataframes before submission."""
-        if st.session_state[self.variables_quant.all_datapoints_submitted] is not None:
-            st.session_state[self.variables_quant.all_datapoints_submission] = st.session_state[
-                self.variables_quant.all_datapoints_submitted
+        if st.session_state[self.variables_subcelldomlfq.all_datapoints_submitted] is not None:
+            st.session_state[self.variables_subcelldomlfq.all_datapoints_submission] = st.session_state[
+                self.variables_subcelldomlfq.all_datapoints_submitted
             ].copy()
-        if st.session_state[self.variables_quant.input_df] is not None:
-            st.session_state[self.variables_quant.input_df_submission] = st.session_state[
-                self.variables_quant.input_df
+        if st.session_state[self.variables_subcelldomlfq.input_df] is not None:
+            st.session_state[self.variables_subcelldomlfq.input_df_submission] = st.session_state[
+                self.variables_subcelldomlfq.input_df
             ].copy()
-        if st.session_state[self.variables_quant.result_perf] is not None:
-            st.session_state[self.variables_quant.result_performance_submission] = st.session_state[
-                self.variables_quant.result_perf
+        if st.session_state[self.variables_subcelldomlfq.result_perf] is not None:
+            st.session_state[self.variables_subcelldomlfq.result_performance_submission] = st.session_state[
+                self.variables_subcelldomlfq.result_perf
             ].copy()
 
     def generate_metadata_uploader(self) -> None:
         """Creates the file uploader for meta data."""
-        self.user_input[self.variables_quant.meta_data] = st.file_uploader(
+        self.user_input[self.variables_subcelldomlfq.meta_data] = st.file_uploader(
             "Meta data for searches",
-            help=self.variables_quant.texts.Help.meta_data_file,
+            help=self.variables_subcelldomlfq.texts.Help.meta_data_file,
             accept_multiple_files=True,
         )
 
@@ -605,31 +605,31 @@ class SubcellprofileDOMLFQUIObjects:
         """Creates the text area for submission comments."""
         self.user_input["comments_for_submission"] = st.text_area(
             "Comments for submission",
-            placeholder=self.variables_quant.texts.ShortMessages.parameters_additional,
+            placeholder=self.variables_subcelldomlfq.texts.ShortMessages.parameters_additional,
             height=200,
         )
-        st.session_state[self.variables_quant.meta_data_text] = self.user_input["comments_for_submission"]
+        st.session_state[self.variables_subcelldomlfq.meta_data_text] = self.user_input["comments_for_submission"]
 
     def generate_confirmation_checkbox(self) -> None:
         """Creates the confirmation checkbox for metadata correctness."""
-        st.session_state[self.variables_quant.check_submission] = st.checkbox(
+        st.session_state[self.variables_subcelldomlfq.check_submission] = st.checkbox(
             "I confirm that the metadata is correct",
         )
         self.stop_duplicating = True
 
     def execute_proteobench(self) -> None:
         """Executes the ProteoBench benchmarking process."""
-        if self.variables_quant.all_datapoints_submitted not in st.session_state:
+        if self.variables_subcelldomlfq.all_datapoints_submitted not in st.session_state:
             self.initialize_main_data_points()
 
         result_performance, all_datapoints, input_df = self.run_benchmarking_process()
-        st.session_state[self.variables_quant.all_datapoints_submitted] = all_datapoints
+        st.session_state[self.variables_subcelldomlfq.all_datapoints_submitted] = all_datapoints
 
         self.set_highlight_column_in_submitted_data()
 
-        st.session_state[self.variables_quant.result_perf] = result_performance
+        st.session_state[self.variables_subcelldomlfq.result_perf] = result_performance
 
-        st.session_state[self.variables_quant.input_df] = input_df
+        st.session_state[self.variables_subcelldomlfq.input_df] = input_df
 
     def run_benchmarking_process(self):
         """Executes the benchmarking process and returns the results."""
@@ -638,17 +638,17 @@ class SubcellprofileDOMLFQUIObjects:
 
         # reload buffer: https://stackoverflow.com/a/64478151/9684872
         self.user_input["input_csv"].seek(0)
-        if st.session_state[self.variables_quant.slider_id_submitted_uuid] in st.session_state.keys():
-            set_slider_val = st.session_state[st.session_state[self.variables_quant.slider_id_submitted_uuid]]
+        if st.session_state[self.variables_subcelldomlfq.slider_id_submitted_uuid] in st.session_state.keys():
+            set_slider_val = st.session_state[st.session_state[self.variables_subcelldomlfq.slider_id_submitted_uuid]]
         else:
-            set_slider_val = self.variables_quant.default_val_slider
+            set_slider_val = self.variables_subcelldomlfq.default_val_slider
 
-        if self.variables_quant.all_datapoints_submitted in st.session_state.keys():
-            all_datapoints = st.session_state[self.variables_quant.all_datapoints_submitted]
+        if self.variables_subcelldomlfq.all_datapoints_submitted in st.session_state.keys():
+            all_datapoints = st.session_state[self.variables_subcelldomlfq.all_datapoints_submitted]
         else:
-            all_datapoints = st.session_state[self.variables_quant.all_datapoints]
+            all_datapoints = st.session_state[self.variables_subcelldomlfq.all_datapoints]
 
-        return self.ionmodule.benchmarking(
+        return self.proteinmodule.benchmarking(
             self.user_input["input_csv"],
             self.user_input["input_format"],
             self.user_input,
@@ -658,43 +658,43 @@ class SubcellprofileDOMLFQUIObjects:
 
     def handle_submitted_table_edits(self) -> None:
         """Callback function for handling edits made to the data table in the UI."""
-        edits = st.session_state[st.session_state[self.variables_quant.table_id_uuid]]["edited_rows"].items()
+        edits = st.session_state[st.session_state[self.variables_subcelldomlfq.table_id_uuid]]["edited_rows"].items()
         for k, v in edits:
             try:
-                st.session_state[self.variables_quant.all_datapoints_submitted][list(v.keys())[0]].iloc[k] = list(
+                st.session_state[self.variables_subcelldomlfq.all_datapoints_submitted][list(v.keys())[0]].iloc[k] = list(
                     v.values()
                 )[0]
             except TypeError:
                 return
-        st.session_state[self.variables_quant.highlight_list_submitted] = list(
-            st.session_state[self.variables_quant.all_datapoints_submitted]["Highlight"]
+        st.session_state[self.variables_subcelldomlfq.highlight_list_submitted] = list(
+            st.session_state[self.variables_subcelldomlfq.all_datapoints_submitted]["Highlight"]
         )
-        st.session_state[self.variables_quant.placeholder_table] = st.session_state[
-            self.variables_quant.all_datapoints_submitted
+        st.session_state[self.variables_subcelldomlfq.placeholder_table] = st.session_state[
+            self.variables_subcelldomlfq.all_datapoints_submitted
         ]
 
-        if len(st.session_state[self.variables_quant.all_datapoints]) == 0:
+        if len(st.session_state[self.variables_subcelldomlfq.all_datapoints]) == 0:
             st.error(f"No datapoints available for plotting", icon="🚨")
 
         try:
             fig_metric = PlotDataPoint.plot_metric(
-                st.session_state[self.variables_quant.all_datapoints],
-                label=st.session_state[st.session_state[self.variables_quant.selectbox_id_uuid]],
+                st.session_state[self.variables_subcelldomlfq.all_datapoints],
+                label=st.session_state[st.session_state[self.variables_subcelldomlfq.selectbox_id_uuid]],
             )
         except Exception as e:
             st.error(f"Unable to plot the datapoints: {e}", icon="🚨")
 
-        st.session_state[self.variables_quant.fig_metric] = fig_metric
+        st.session_state[self.variables_subcelldomlfq.fig_metric] = fig_metric
 
     def load_user_parameters(self) -> Any:
         """Reads and processes the parameter files provided by the user."""
         params = None
 
         try:
-            params = self.ionmodule.load_params_file(
-                self.user_input[self.variables_quant.meta_data], self.user_input["input_format"]
+            params = self.proteinmodule.load_params_file(
+                self.user_input[self.variables_subcelldomlfq.meta_data], self.user_input["input_format"]
             )
-            st.session_state[self.variables_quant.params_json_dict] = (
+            st.session_state[self.variables_subcelldomlfq.params_json_dict] = (
                 params.__dict__ if hasattr(params, "__dict__") else params
             )
 
@@ -711,14 +711,14 @@ class SubcellprofileDOMLFQUIObjects:
 
     def generate_additional_parameters_fields_submission(self) -> None:
         """Creates the additional parameters section of the form and initializes the parameter fields."""
-        st.markdown(self.variables_quant.texts.ShortMessages.initial_parameters)
+        st.markdown(self.variables_subcelldomlfq.texts.ShortMessages.initial_parameters)
 
         # Load JSON config
-        with open(self.variables_quant.additional_params_json) as file:
+        with open(self.variables_subcelldomlfq.additional_params_json) as file:
             config = json.load(file)
 
         # Check if parsed values exist in session state
-        parsed_params = st.session_state.get(self.variables_quant.params_json_dict, {})
+        parsed_params = st.session_state.get(self.variables_subcelldomlfq.params_json_dict, {})
 
         st_col1, st_col2, st_col3 = st.columns(3)
         input_param_len = int(len(config.items()) / 3)
@@ -751,68 +751,68 @@ class SubcellprofileDOMLFQUIObjects:
         form_values = {}
 
         # Load JSON config (same file used to create fields)
-        with open(self.variables_quant.additional_params_json, "r") as file:
+        with open(self.variables_subcelldomlfq.additional_params_json, "r") as file:
             config = json.load(file)
 
         # Extract values from session state
         for key in config.keys():
-            form_key = self.variables_quant.prefix_params + key  # Ensure correct session key
+            form_key = self.variables_subcelldomlfq.prefix_params + key  # Ensure correct session key
             form_values[key] = st.session_state.get(form_key, None)  # Retrieve value, default to None if missing
 
         return form_values
 
     def display_public_submission_ui(self) -> None:
-        if self.variables_quant.first_new_plot:
+        if self.variables_subcelldomlfq.first_new_plot:
             self.generate_submission_ui_elements()
 
-        if self.user_input[self.variables_quant.meta_data]:
+        if self.user_input[self.variables_subcelldomlfq.meta_data]:
             params = self.load_user_parameters()
-            st.session_state[self.variables_quant.params_file_dict] = params.__dict__
+            st.session_state[self.variables_subcelldomlfq.params_file_dict] = params.__dict__
             self.params_file_dict_copy = copy.deepcopy(params.__dict__)
             print(self.params_file_dict_copy)
             self.generate_additional_parameters_fields_submission()
         else:
             params = None
 
-        if st.session_state[self.variables_quant.check_submission] and params != None:
+        if st.session_state[self.variables_subcelldomlfq.check_submission] and params != None:
             get_form_values = self.get_form_values()
             params = ProteoBenchParameters(**get_form_values)
             pr_url = self.submit_to_repository(params)
         if self.submission_ready == False:
             return
         if (
-            st.session_state[self.variables_quant.check_submission]
+            st.session_state[self.variables_subcelldomlfq.check_submission]
             and params != None
-            and self.variables_quant.submit in st.session_state
+            and self.variables_subcelldomlfq.submit in st.session_state
             and pr_url != None
         ):
             self.show_submission_success_message(pr_url)
 
     def generate_current_data_plots(self, recalculate: bool) -> go.Figure:
         """Generates and returns plots based on the current benchmark data."""
-        if self.variables_quant.result_perf not in st.session_state.keys():
+        if self.variables_subcelldomlfq.result_perf not in st.session_state.keys():
             st.error(":x: Please provide a result file", icon="🚨")
             return False
 
-        st.session_state[self.variables_quant.result_perf] = st.session_state[self.variables_quant.result_perf][
-            st.session_state[self.variables_quant.result_perf]["nr_observed"]
-            >= st.session_state[st.session_state[self.variables_quant.slider_id_uuid]]
+        st.session_state[self.variables_subcelldomlfq.result_perf] = st.session_state[self.variables_subcelldomlfq.result_perf][
+            st.session_state[self.variables_subcelldomlfq.result_perf]["nr_observed"]
+            >= st.session_state[st.session_state[self.variables_subcelldomlfq.slider_id_uuid]]
         ]
 
         if recalculate:
             parse_settings = self.parsesettingsbuilder.build_parser(self.user_input["input_format"])
 
             fig_logfc = PlotDataPoint.plot_fold_change_histogram(
-                st.session_state[self.variables_quant.result_perf], parse_settings.species_expected_ratio()
+                st.session_state[self.variables_subcelldomlfq.result_perf], parse_settings.species_expected_ratio()
             )
-            fig_CV = PlotDataPoint.plot_CV_violinplot(st.session_state[self.variables_quant.result_perf])
-            st.session_state[self.variables_quant.fig_cv] = fig_CV
-            st.session_state[self.variables_quant.fig_logfc] = fig_logfc
+            fig_CV = PlotDataPoint.plot_CV_violinplot(st.session_state[self.variables_subcelldomlfq.result_perf])
+            st.session_state[self.variables_subcelldomlfq.fig_cv] = fig_CV
+            st.session_state[self.variables_subcelldomlfq.fig_logfc] = fig_logfc
         else:
-            fig_logfc = st.session_state[self.variables_quant.fig_logfc]
-            fig_CV = st.session_state[self.variables_quant.fig_cv]
+            fig_logfc = st.session_state[self.variables_subcelldomlfq.fig_logfc]
+            fig_CV = st.session_state[self.variables_subcelldomlfq.fig_cv]
 
-        if self.variables_quant.first_new_plot:
+        if self.variables_subcelldomlfq.first_new_plot:
             col1, col2 = st.columns(2)
             col1.subheader("Log2 Fold Change distributions by species.")
             col1.markdown(
@@ -833,9 +833,9 @@ class SubcellprofileDOMLFQUIObjects:
             pass
 
         st.subheader("Sample of the processed file")
-        st.markdown(open(self.variables_quant.description_table_md, "r").read())
-        st.session_state[self.variables_quant.df_head] = st.dataframe(
-            st.session_state[self.variables_quant.result_perf].head(100)
+        st.markdown(open(self.variables_subcelldomlfq.description_table_md, "r").read())
+        st.session_state[self.variables_subcelldomlfq.df_head] = st.dataframe(
+            st.session_state[self.variables_subcelldomlfq.result_perf].head(100)
         )
 
         st.subheader("Download table")
@@ -843,7 +843,7 @@ class SubcellprofileDOMLFQUIObjects:
         sample_name = self.generate_sample_name()
         st.download_button(
             label="Download",
-            data=streamlit_utils.save_dataframe(st.session_state[self.variables_quant.result_perf]),
+            data=streamlit_utils.save_dataframe(st.session_state[self.variables_subcelldomlfq.result_perf]),
             file_name=f"{sample_name}.csv",
             mime="text/csv",
             key=f"{random_uuid}",
