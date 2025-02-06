@@ -32,7 +32,7 @@ class VariablesSubcellprofileDOMLFQ:
     first_new_plot: bool = True
     default_val_slider: int = 3
     beta_warning: bool = True
-    github_link_pr: str = "github.com/Proteobot/Results_quant_ion_DIA.git"
+    github_link_pr: str = "github.com/Proteobot/Results_subcellprofile_DOMLFQ_protein_DIA_EXPL.git"
     selectbox_id_submitted_uuid: str = "selectbox_id_submitted_subcell_domlfq"
     selectbox_id_uuid: str = "selectbox_id_subcell_domlfq"
     slider_id_submitted_uuid: str = "slider_id_submitted_subcell_domlfq"
@@ -66,7 +66,6 @@ class VariablesSubcellprofileDOMLFQ:
 
     title: str = "Subcellular protein profiling - DOMLFQ"
 
-    additional_params_json: str = "../proteobench/io/params/json/Quant/lfq/ion/DIA/fields.json"
-    prefix_params: str = "lfq_ion_dia_aif_quant_"
-    params_json_dict: str = "params_json_dict_lfq_ion_dda_aif_quant"
-    params_file_dict: str = "params_file_dict_lfq_ion_dia_aif_quant"
+    prefix_params: str = "subcell_domlfq_protein_dia_expl_"
+    params_json_dict: str = "params_json_dict_subcell_domlfq_protein_dia_expl"
+    params_file_dict: str = "params_file_dict_subcell_domlfq_protein_dia_expl"
