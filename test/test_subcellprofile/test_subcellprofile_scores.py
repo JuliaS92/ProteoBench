@@ -49,7 +49,6 @@ def test_run_SpatialDataSetComparison_noerrors(Score_SpatialDataSet: Subcellprof
     Score_SpatialDataSet.run_SpatialDataSetComparison()
 
 
-@pytest.mark.skip("requires domaps 1.0.5")
 def test_median_profile_reproducibility(Score_SpatialDataSetComparison):
     """Running the method median_profile_reproducibility and assert the cast of the result."""
     medians_test = Score_SpatialDataSetComparison._median_profile_reproducibility()
