@@ -12,7 +12,6 @@ import streamlit as st
 from pandas import DataFrame
 
 from proteobench.datapoint.quant_datapoint import (
-    QuantDatapoint,
     filter_df_numquant_epsilon,
     filter_df_numquant_nr_prec,
 )
@@ -24,9 +23,6 @@ from proteobench.io.params.fragger import extract_params as extract_params_fragg
 from proteobench.io.params.spectronaut import (
     read_spectronaut_settings as extract_params_spectronaut,
 )
-from proteobench.io.parsing.parse_ion import load_input_file
-from proteobench.io.parsing.parse_settings import ParseSettingsBuilder
-from proteobench.score.quant.quantscores import QuantScores
 
 
 class SubcellprofileBaseModule:
@@ -209,27 +205,15 @@ class SubcellprofileBaseModule:
         -------
         tuple[DataFrame, DataFrame, DataFrame]
             A tuple containing the intermediate data structure, all data points, and the input DataFrame.
+
+        Raises
+        ------
+        NotImplementedError
+            The benchmarking method is not implemented for the base module and has to be
+            provided in the sub module implementation.
+
         """
-        # Parse user config
-        input_df = load_input_file(input_file, input_format)
-        parse_settings = ParseSettingsBuilder(
-            parse_settings_dir=self.parse_settings_dir, module_id=self.module_id
-        ).build_parser(input_format)
-        standard_format, replicate_to_raw = parse_settings.convert_to_standard_format(input_df)
-
-        # Get quantification data
-        quant_score = QuantScores(
-            self.precursor_name, parse_settings.species_expected_ratio(), parse_settings.species_dict()
-        )
-        intermediate_data_structure = quant_score.generate_intermediate(standard_format, replicate_to_raw)
-
-        current_datapoint = QuantDatapoint.generate_datapoint(
-            intermediate_data_structure, input_format, user_input, default_cutoff_min_prec=default_cutoff_min_prec
-        )
-
-        all_datapoints = self.add_current_data_point(current_datapoint, all_datapoints=all_datapoints)
-
-        return intermediate_data_structure, all_datapoints, input_df
+        raise NotImplementedError("The benchmarking method is not implemented for the base module.")
 
     def check_new_unique_hash(self, datapoints: pd.DataFrame) -> bool:
         """
