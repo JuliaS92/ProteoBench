@@ -53,7 +53,7 @@ class SubcellprofileBaseModule:
         "DIA-NN": extract_params_diann,
         "AlphaDIA": extract_params_alphadia,
         "FragPipe (DIA-NN quant)": extract_params_fragger,
-        "Spectronaut": extract_params_spectronaut,    
+        "Spectronaut": extract_params_spectronaut,
     }
 
     def __init__(
@@ -118,7 +118,7 @@ class SubcellprofileBaseModule:
 
         if not isinstance(all_datapoints, pd.DataFrame):
             all_datapoints = self.github_repo.read_results_json_repo()
-        
+
         current_datapoint["old_new"] = "new"
         all_datapoints = all_datapoints.T
 
@@ -202,7 +202,8 @@ class SubcellprofileBaseModule:
             input_format (str): Format of the workflow output file.
             user_input (dict): User-provided parameters for plotting.
             all_datapoints (Optional[pd.DataFrame]): DataFrame containing all data points from the ProteoBench repo.
-            default_cutoff_min_prec (int, optional): Minimum number of runs an ion has to be identified in. Defaults to 3.
+            default_cutoff_min_prec (int, optional): Minimum number of runs an ion has to be identified in, defaults
+                to 3.
 
         Returns
         -------
@@ -264,7 +265,7 @@ class SubcellprofileBaseModule:
         datapoint_params: Any,
         remote_git: str,
         submission_comments: str = "no comments",
-    ) -> str:
+    ) -> Optional[str]:
         """
         Clone the repo and open a pull request with the new data points.
 
@@ -276,7 +277,7 @@ class SubcellprofileBaseModule:
 
         Returns
         -------
-        str
+        Optional[str]
             The URL of the created pull request.
         """
         self.github_repo.clone_repo_pr()
