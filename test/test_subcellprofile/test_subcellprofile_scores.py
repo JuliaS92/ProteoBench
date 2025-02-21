@@ -3,7 +3,6 @@ import os
 from unittest.mock import patch
 
 import pandas as pd
-import pytest
 from pytest import fixture
 
 from proteobench.score.subcellprofile.subcellprofile_scores import (

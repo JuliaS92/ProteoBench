@@ -7,16 +7,13 @@ from typing import Optional, Tuple
 import pandas as pd
 from pandas import DataFrame
 
-# TODO: Needs to be adapted to the new Datapoint and QuantScores classes
 from proteobench.datapoint.subcellprofile_datapoint import SubcellprofileDatapoint
 from proteobench.exceptions import (
     ConvertStandardFormatError,
     DatapointAppendError,
     DatapointGenerationError,
-    IntermediateFormatGenerationError,
     ParseError,
     ParseSettingsError,
-    QuantificationError,
 )
 from proteobench.io.parsing.parse_proteins import load_input_file
 from proteobench.io.parsing.parse_settings import ParseSettingsBuilder
