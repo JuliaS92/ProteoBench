@@ -32,12 +32,12 @@ METRICS: list[tuple[str, str, str]] = [
     ("median_profile_reproducibility", "", ""),
     ("mean_complex_scatter", "", ""),
 ]
-"""Main metrics of subcellprofile module for plotting.
+"""Description of main metrics for plotting and labeling of the plots.
 [(column_name, short_description, full_description), ...]
 """
 
 DOMAPS_SETTINGS = {
-    "filename": "standard_format",  # TODO: Replace with original filename but no FILEENDING, so the file buffer is read as a csv file by `domaps`
+    "filename": "standard_format",  # TODO: Replace with original filename but no FILEENDING, so the file buffer is read as a csv file by `domaps`  # noqa: E501
     "expname": "standard_format",  # TODO: Replace with something more descriptive
     "source": "custom",
     "acquisition": "custom",
@@ -72,7 +72,7 @@ class SubcellprofileDomlfqProteinDIAEXPLModule(SubcellprofileBaseModule):
     """DIA Quantification Module for Ion level Quantification."""
 
     metrics: list[tuple[str, str, str]] = METRICS
-    """Main metrics for plotting.
+    """Description of main metrics for plotting and labeling of the plots.
     [(column_name, short_description, full_description), ...]
     """
 
