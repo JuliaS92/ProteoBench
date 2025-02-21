@@ -10,10 +10,7 @@ TESTDATA_FILES = {
     "DIA-NN": os.path.join(TESTDATA_DIR, "TRIMMED_DIANN_1-9-2_report.pg_matrix.tsv"),
     "FragPipe (DIA-NN quant)": os.path.join(TESTDATA_DIR, "TRIMMED_FragPipe_DIANNquant_2-0_report.pg_matrix.tsv"),
     "AlphaDIA": os.path.join(TESTDATA_DIR, "TRIMMED_AlphaDIA_1-9-2_pg.matrix.tsv"),
-    "Spectronaut": os.path.join(
-        TESTDATA_DIR,
-        "TRIMMED_Spectronaut_19-5_20250130_154210_Proteobench-newdataset_DIA_Exploris_compartiments_ProteinPivot_Report.tsv",
-    ),
+    "Spectronaut": os.path.join(TESTDATA_DIR, "TRIMMED_Spectronaut_19-5_20250130_154210_Proteobench-newdataset_DIA_Exploris_compartiments_ProteinPivot_Report.tsv"),  # noqa: E501; fmt: skip
 }
 SUPPORTED_SOFTWARE_TOOLS = ("DIA-NN", "FragPipe (DIA-NN quant)", "AlphaDIA", "Spectronaut")
 PARSE_SETTINGS_DIR = os.path.abspath(

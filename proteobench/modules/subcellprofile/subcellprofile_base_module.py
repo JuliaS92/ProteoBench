@@ -298,7 +298,7 @@ class SubcellprofileBaseModule:
 
         if not self.check_new_unique_hash(all_datapoints):
             logging.error("The run was previously submitted. Will not submit.")
-            return False
+            return None
 
         branch_name = current_datapoint["id"].replace(" ", "_").replace("(", "").replace(")", "")
         path_write = os.path.join(self.t_dir_pr, "results.json")
