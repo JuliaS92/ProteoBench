@@ -7,7 +7,7 @@ import pandas as pd
 from pandas import DataFrame
 
 # TODO: Needs to be adapted to the new Datapoint and QuantScores classes
-from proteobench.datapoint.quant_datapoint import Datapoint
+from proteobench.datapoint.quant_datapoint import QuantDatapoint
 from proteobench.exceptions import (
     ConvertStandardFormatError,
     DatapointAppendError,
