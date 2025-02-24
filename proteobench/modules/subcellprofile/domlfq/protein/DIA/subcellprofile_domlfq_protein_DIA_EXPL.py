@@ -26,11 +26,27 @@ from proteobench.score.subcellprofile.subcellprofile_scores import (
 
 METRICS: list[tuple[str, str, str]] = [
     ("depth_id_total", "Protein IDs total", "Total number of protein groups identified in any replicate"),
-    ("depth_profile_total", "Protein profiles total", "Total number of protein groups profiles with enough consecutive values in any replciate"),
+    (
+        "depth_profile_total",
+        "Protein profiles total",
+        "Total number of protein groups profiles with enough consecutive values in any replciate",
+    ),
     ("depth_id_intersection", "Protein IDs all replicates", "Number of protein groups identified in all replicates"),
-    ("depth_profile_intersection", "Protein profiles total", "Total number of protein groups profiles with enough consecutive values in all replciates"),
-    ("median_profile_reproducibility", "Median profile reproducibility [Manhattan distance]", "Median profile reproducibility, which is the mean manhattan distance to the mean profile for each protein group"),
-    ("mean_complex_scatter", "", "Mean complex scatter across replicates and complexes with at least 5 members. Complex scatter is the median across protein groups of manhattan distances to the median profile of the complex."),
+    (
+        "depth_profile_intersection",
+        "Protein profiles total",
+        "Total number of protein groups profiles with enough consecutive values in all replciates",
+    ),
+    (
+        "median_profile_reproducibility",
+        "Median profile reproducibility [Manhattan distance]",
+        "Median profile reproducibility, which is the mean manhattan distance to the mean profile for each protein group",
+    ),
+    (
+        "mean_complex_scatter",
+        "",
+        "Mean complex scatter across replicates and complexes with at least 5 members. Complex scatter is the median across protein groups of manhattan distances to the median profile of the complex.",
+    ),
 ]
 """Description of main metrics for plotting and labeling of the plots.
 [(column_name, short_description, full_description), ...]
