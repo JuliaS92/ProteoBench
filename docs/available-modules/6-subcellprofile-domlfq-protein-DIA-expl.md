@@ -1,6 +1,6 @@
 # Subcellular profile DOM LFQ - protein level - DIA
 
-This module uses subcellular fractionation to assess the sensitivity and quantification accuracy for data acquired with data-independent acquisition (DIA) on a Thermo Exploris 480. It is based on the assumption that proteins belonging to the same complex show the same quantification changes when comparing subcellular fractions. As an example: If protein A and protein B belong to the same complex, their percentual intensities should increase or decrease similarly between fraction 1 and fraction 2. In this module, we use the organellar mappings dataset from [Schessner et al., 2023](https://www.nature.com/articles/s41467-023-41000-7) that measured the protein quantities of human proteins in 6 subcellular fractions. The curve created by plotting the protein intensity (% of total intensity across all fractions) over all fractions is called a "protein profile", and only profiles with at least 4 consecutive points are taken into account.
+This module uses subcellular fractionation to assess the sensitivity and quantification accuracy for data acquired with data-independent acquisition (DIA) on a Thermo Exploris 480. It is based on the assumption that proteins belonging to the same complex show the same intensity distribution across subcellular fractions. As an example: If protein A and protein B belong to the same complex, their percentual intensities should increase or decrease similarly between fraction 1 and fraction 2. In this module, we use the organellar mappings dataset from [Schessner et al., 2023](https://www.nature.com/articles/s41467-023-41000-7) that measured the protein quantities of human proteins in 6 subcellular fractions. The curve created by plotting the protein intensity (% of total intensity across all fractions) over all fractions is called a "protein profile", and only profiles with at least 4 consecutive points are taken into account.
 
 This module is work in progress.
 **We are working on the documentation: more information comming soon.**
@@ -60,7 +60,8 @@ In this module, the performance of the workflow is evaluated on these metrics:
 TBD: which proteins are used and why
 
 1) Profile depth: Number of proteins for which a profile could be calculated. Only proteins with 4 or more quantification values in **consecutive** runs are used.
-2) Complex scatter: Mean (?) of the mean (?) manhattan distance of protein profiles to the average (?) protein profile per complex
+2) Complex scatter: Mean across replicates and complexes of the mean manhattan distance of protein profiles to the median protein profile per complex that has at least five members profiled.
+3) Profile reproducibility: Median of all profile reproducibilities - the mean manhattan distance of each replicate profile to the mean protein profile across replicates.
 
 ## How to use
 
@@ -112,7 +113,7 @@ After upload, you will get a link to a Github pull request associated with your 
 ### [AlphaDIA](https://github.com/MannLabs/alphadia)
 1. Select FASTA and import .raw files in "Input files"
 2. In "Method settings" you need to define your search parameters
-3. Turn on "Predict Library"
+3. Turn on "Predict Library", optionally run a second search iteration with the MBR library.
 4. The input files for ProteoBench are "pg_matrix.tsv" (protein quantification) and "log.txt" (parameter files)
 
 ### [FragPipe - DIA-NN](https://github.com/Nesvilab/FragPipe)
