@@ -179,7 +179,7 @@ class SubcellprofileDomlfqProteinDIAEXPLModule(SubcellprofileBaseModule):
             raise ParseSettingsError(f"Error parsing settings file for parsing: {e}")
 
         try:
-            standardized_table, replicate_to_raw = parse_settings.convert_to_standard_format(input_df)
+            standardized_table, _ = parse_settings.convert_to_standard_format(input_df)
         except KeyError as e:
             raise ConvertStandardFormatError(f"Error converting to standard format, key missing: {e}")
         except Exception as e:
