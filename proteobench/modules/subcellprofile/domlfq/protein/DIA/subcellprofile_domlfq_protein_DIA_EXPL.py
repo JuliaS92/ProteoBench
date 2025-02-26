@@ -1,31 +1,96 @@
 from __future__ import annotations
 
 import os
+from io import StringIO
 from typing import Optional, Tuple
 
 import pandas as pd
 from pandas import DataFrame
 
-# TODO: Needs to be adapted to the new Datapoint and QuantScores classes
-from proteobench.datapoint.quant_datapoint import Datapoint
+from proteobench.datapoint.subcellprofile_datapoint import SubcellprofileDatapoint
 from proteobench.exceptions import (
     ConvertStandardFormatError,
     DatapointAppendError,
     DatapointGenerationError,
-    IntermediateFormatGenerationError,
     ParseError,
     ParseSettingsError,
-    QuantificationError,
 )
 from proteobench.io.parsing.parse_proteins import load_input_file
 from proteobench.io.parsing.parse_settings import ParseSettingsBuilder
-from proteobench.modules.quant.quant_base.quant_base_module import QuantModule
-from proteobench.score.quant.quantscores import QuantScores
+from proteobench.modules.subcellprofile.subcellprofile_base_module import (
+    SubcellprofileBaseModule,
+)
+from proteobench.score.subcellprofile.subcellprofile_scores import (
+    Subcellprofile_Scores,
+)
+
+METRICS: list[tuple[str, str, str]] = [
+    ("depth_id_total", "Protein IDs total", "Total number of protein groups identified in any replicate"),
+    (
+        "depth_profile_total",
+        "Protein profiles total",
+        "Total number of protein groups profiles with enough consecutive values in any replciate",
+    ),
+    ("depth_id_intersection", "Protein IDs all replicates", "Number of protein groups identified in all replicates"),
+    (
+        "depth_profile_intersection",
+        "Protein profiles total",
+        "Total number of protein groups profiles with enough consecutive values in all replciates",
+    ),
+    (
+        "median_profile_reproducibility",
+        "Median profile reproducibility [Manhattan distance]",
+        "Median profile reproducibility, which is the mean manhattan distance to the mean profile for each protein group",
+    ),
+    (
+        "mean_complex_scatter",
+        "",
+        "Mean complex scatter across replicates and complexes with at least 5 members. Complex scatter is the median across protein groups of manhattan distances to the median profile of the complex.",
+    ),
+]
+"""Description of main metrics for plotting and labeling of the plots.
+[(column_name, short_description, full_description), ...]
+"""
+
+DOMAPS_SETTINGS = {
+    "filename": "standard_format",  # TODO: Replace with original filename but no FILEENDING, so the file buffer is read as a csv file by `domaps`  # noqa: E501
+    "expname": "standard_format",  # TODO: Replace with something more descriptive
+    "source": "custom",
+    "acquisition": "custom",
+    "level": "proteins",
+    "orientation": "long",
+    "original_protein_ids": "Proteins",
+    "genes": "Proteins",
+    "sets": {"Abundance": "Intensity"},
+    "name_pattern": ".*_(?P<rep>Map.)_(?P<frac>.*K).*",
+    "fractions": ["1K", "3K", "6K", "12K", "24K", "80K"],
+    "fraction_mapping": {"1K": "1K", "3K": "3K", "6K": "6K", "12K": "12K", "24K": "24K", "80K": "80K"},
+    "columns_annotation": [],
+    "samples": "Raw file",
+    "organism": "Homo sapiens",
+    "reannotate": False,
+    "reannotation_source": "Homo sapiens - uniprot reference_swissprot",
+    "organelles": "Homo sapiens - Uniprot",
+    "complexes": "Homo sapiens - Uniprot",
+    "input_invert": False,
+    "input_logged": False,
+    "input_samplenormalization": None,
+    "quality_filter": ["consecutive"],
+    "consecutive": 4,
+    "column_filters": {},
+    "comment": "Settings for ProteoBench standardized output.",
+    "domaps_settings_version": "1.0.4",
+}
 
 
 # class DIAQuantIonModule(QuantModule):
-class SubcellprofileDomlfqProteinDIAEXPLModule:
+class SubcellprofileDomlfqProteinDIAEXPLModule(SubcellprofileBaseModule):
     """DIA Quantification Module for Ion level Quantification."""
+
+    metrics: list[tuple[str, str, str]] = METRICS
+    """Description of main metrics for plotting and labeling of the plots.
+    [(column_name, short_description, full_description), ...]
+    """
 
     def __init__(
         self,
@@ -46,7 +111,7 @@ class SubcellprofileDomlfqProteinDIAEXPLModule:
                 "subcellprofile",
                 "domlfq",
                 "protein",
-                "subcellprofile_domlfq_protein_DIA_EXPL",
+                "DIA",
             )
         ),
         module_id: str = "subcellprofile_domlfq_protein_DIA_EXPL",
@@ -79,7 +144,7 @@ class SubcellprofileDomlfqProteinDIAEXPLModule:
         input_format: str,
         user_input: dict,
         all_datapoints: Optional[pd.DataFrame],
-    ) -> Tuple[DataFrame, DataFrame, DataFrame]:
+    ) -> Tuple[DataFrame, DataFrame]:
         """
         Main workflow of the module for benchmarking workflow results.
 
@@ -90,19 +155,18 @@ class SubcellprofileDomlfqProteinDIAEXPLModule:
             all_datapoints (Optional[pd.DataFrame]): DataFrame containing all data points from the repo.
 
         Returns:
-            Tuple[DataFrame, DataFrame, DataFrame]: A tuple containing the intermediate data structure, all data points, and the input DataFrame.
+            Tuple[DataFrame, DataFrame]: DataFrame containing all data points, dataframe of the input file
         """
-        # Parse workflow output file
         try:
             input_df = load_input_file(input_file, input_format)
         except pd.errors.ParserError as e:
             raise ParseError(
-                f"Error parsing {input_format} file, please ensure the format is correct and the correct software tool is chosen: {e}"
+                f"Error parsing {input_format} file, please ensure the format is correct "
+                f"and the correct software tool is chosen: {e}"
             )
         except Exception as e:
             raise ParseSettingsError(f"Error parsing the input file: {e}")
 
-        # Parse settings file
         try:
             parse_settings = ParseSettingsBuilder(
                 parse_settings_dir=self.parse_settings_dir, module_id=self.module_id
@@ -115,46 +179,31 @@ class SubcellprofileDomlfqProteinDIAEXPLModule:
             raise ParseSettingsError(f"Error parsing settings file for parsing: {e}")
 
         try:
-            standard_format, replicate_to_raw = parse_settings.convert_to_standard_format(input_df)
+            standardized_table, _ = parse_settings.convert_to_standard_format(input_df)
         except KeyError as e:
             raise ConvertStandardFormatError(f"Error converting to standard format, key missing: {e}")
         except Exception as e:
             raise ConvertStandardFormatError(f"Error converting to standard format: {e}")
 
-        return pd.DataFrame(), pd.DataFrame(), input_df
-        """
-        # Calculate quantification scores
-        try:
-            quant_score = QuantScores(
-                self.precursor_name, parse_settings.species_expected_ratio(), parse_settings.species_dict()
-            )
-        except Exception as e:
-            raise QuantificationError(f"Error generating quantification scores: {e}")
+        domaps_settings = DOMAPS_SETTINGS
+        standardized_table_file_buffer = StringIO(standardized_table.to_csv(sep=",", index=False))
 
-        # Generate intermediate data structure
-        try:
-            intermediate_data_structure = quant_score.generate_intermediate(standard_format, replicate_to_raw)
-        except Exception as e:
-            raise IntermediateFormatGenerationError(f"Error generating intermediate data structure: {e}")
+        quant_score = Subcellprofile_Scores()
+        quant_score.generate_SpatialDataSet(content=standardized_table_file_buffer, settings=domaps_settings)
+        quant_score.run_SpatialDataSetComparison()
+        metrics: dict[str, float] = quant_score.get_metrics()
 
-        # Generate current data point
         try:
-            current_datapoint = Datapoint.generate_datapoint(
-                intermediate_data_structure, input_format, user_input, default_cutoff_min_prec=default_cutoff_min_prec
-            )
+            current_datapoint = SubcellprofileDatapoint.generate_datapoint(metrics, input_format, user_input)
         except Exception as e:
             raise DatapointGenerationError(f"Error generating datapoint: {e}")
 
-        # Add current data point to all datapoints
         try:
             all_datapoints = self.add_current_data_point(current_datapoint, all_datapoints=all_datapoints)
         except Exception as e:
             raise DatapointAppendError(f"Error adding current data point: {e}")
 
-        # Return intermediate data structure, all datapoints, and input DataFrame
         return (
-            intermediate_data_structure,
             all_datapoints,
             input_df,
         )
-        """

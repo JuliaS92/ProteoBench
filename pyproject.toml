@@ -28,7 +28,7 @@ dependencies = [
   "toml",
   "PyGithub",
   "GitPython",
-  "domaps",
+  "domaps>=1.1",
 ]
 license = { file = "LICENSE" }
 name = "proteobench"
