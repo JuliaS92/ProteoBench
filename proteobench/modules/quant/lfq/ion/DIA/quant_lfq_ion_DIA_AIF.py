@@ -49,6 +49,7 @@ class DIAQuantIonModule(QuantModule):
         token: str,
         proteobot_repo_name: str = "Proteobot/Results_quant_ion_DIA",
         proteobench_repo_name: str = "Proteobench/Results_quant_ion_DIA",
+        module_id: str = "quant_lfq_ion_DIA_AIF",
     ):
         """
         DIA Quantification Module for Ion level Quantification.

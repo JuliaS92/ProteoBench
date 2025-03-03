@@ -45,6 +45,7 @@ class DDAQuantIonModule(QuantModule):
         token: str,
         proteobench_repo_name: str = "Proteobench/Results_quant_ion_DDA",
         proteobot_repo_name: str = "Proteobot/Results_quant_ion_DDA",
+        module_id: str = "quant_lfq_ion_DDA",
     ):
         """
         DDA Quantification Module for Ion level Quantification.
