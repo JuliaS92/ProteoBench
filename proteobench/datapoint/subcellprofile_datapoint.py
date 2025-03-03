@@ -8,11 +8,10 @@ from dataclasses import dataclass
 from datetime import datetime
 from typing import Any, Dict
 
+import domaps
 import pandas as pd
 
 import proteobench
-
-import domaps
 
 
 @dataclass
@@ -38,7 +37,6 @@ class SubcellprofileDatapoint:
         max_peptide_length (int): Maximum peptide length.
         is_temporary (bool): Whether the data is temporary.
         intermediate_hash (str): Hash of the intermediate result.
-        results (dict): A dictionary of metrics for the benchmark run.
         comments (str): Any additional comments.
         proteobench_version (str): Version of the Proteobench tool used.
         domaps_version (str): Version of the domaps used for metrics calculation.
@@ -69,7 +67,6 @@ class SubcellprofileDatapoint:
     max_peptide_length: int = 0
     is_temporary: bool = True
     intermediate_hash: str = ""
-    results: dict = None  # TODO: discuss what exactly is going in here
     comments: str = ""
     proteobench_version: str = ""
     domaps_version: str = ""
@@ -85,23 +82,22 @@ class SubcellprofileDatapoint:
         Generates a unique ID for the benchmark run by combining the software name and a timestamp.
 
         This ID is used to uniquely identify each run of the benchmark.
+
+        NOTE: Not sure what the exact function of this is.
         """
         time_stamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         self.id = "_".join([self.software_name, str(time_stamp)])
         logging.info(f"Assigned the following ID to this run: {self.id}")
 
     @staticmethod
-    def generate_datapoint(
-        intermediate: pd.DataFrame, input_format: str, user_input: dict, default_cutoff_min_prec: int = 3
-    ) -> pd.Series:
+    def generate_datapoint(metrics: dict[str, float], input_format: str, user_input: dict) -> pd.Series:
         """
         Generates a Datapoint object containing metadata and results from the benchmark run.
 
         Args:
-            intermediate (pd.DataFrame): The intermediate DataFrame containing benchmark results.
+            metrics (dict[str, float]): The metrics calculated for the benchmark run.
             input_format (str): The format of the input data (e.g., file format).
             user_input (dict): User-defined input values for the benchmark.
-            default_cutoff_min_prec (int, optional): The default minimum precursor cutoff value. Defaults to 3.
 
         Returns:
             pd.Series: A Pandas Series containing the Datapoint's attributes as key-value pairs.
@@ -120,6 +116,7 @@ class SubcellprofileDatapoint:
         except AttributeError:
             user_input = {key: ("" if value is None else value) for key, value in user_input.items()}
 
+        datapoint_hash = str(hashlib.sha1(pd.Series(metrics).to_string().encode("utf-8")).hexdigest())
         result_datapoint = SubcellprofileDatapoint(
             id=input_format + "_" + user_input["software_version"] + "_" + formatted_datetime,
             software_name=input_format,
@@ -136,22 +133,15 @@ class SubcellprofileDatapoint:
             allowed_miscleavages=user_input["allowed_miscleavages"],
             min_peptide_length=user_input["min_peptide_length"],
             max_peptide_length=user_input["max_peptide_length"],
-            intermediate_hash=str(hashlib.sha1(intermediate.to_string().encode("utf-8")).hexdigest()),
+            intermediate_hash=datapoint_hash,
             comments=user_input["comments_for_plotting"],
             proteobench_version=proteobench.__version__,
             domaps_version=domaps.__version__,
         )
-
         result_datapoint.generate_id()
 
-        # calculate depth, reproducibility and profiling precision
-        results = dict(
-            ChainMap(*[SubcellprofileDatapoint.get_metrics(intermediate, nr_observed) for nr_observed in range(1, 7)])
-        )
-        result_datapoint.results = results
-        results_series = pd.Series(dataclasses.asdict(result_datapoint))
-
-        return results_series
+        data_dict = {**dataclasses.asdict(result_datapoint), **metrics}
+        return pd.Series(data_dict)
 
     @staticmethod
     def get_metrics(df: pd.DataFrame, min_nr_observed: int = 4) -> Dict[int, Dict[str, float]]:
