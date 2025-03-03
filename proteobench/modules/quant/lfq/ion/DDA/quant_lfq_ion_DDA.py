@@ -72,8 +72,8 @@ class DDAQuantIonModule(QuantModule):
             token,
             proteobot_repo_name=proteobot_repo_name,
             proteobench_repo_name=proteobench_repo_name,
-            parse_settings_dir=MODULE_SETTINGS_DIRS[self.module_id],
-            module_id=self.module_id,
+            parse_settings_dir=MODULE_SETTINGS_DIRS[module_id],
+            module_id=module_id,
         )
         self.precursor_name = "precursor ion"
 
