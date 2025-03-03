@@ -1,3 +1,7 @@
+"""
+DDA Quantification Module for Ion level Quantification.
+"""
+
 from __future__ import annotations
 
 import os
@@ -22,7 +26,22 @@ from proteobench.score.quant.quantscores import QuantScores
 
 
 class DDAQuantIonModule(QuantModule):
-    """DDA Quantification Module for Ion level Quantification."""
+    """
+    DDA Quantification Module for Ion level Quantification.
+
+    Parameters
+    ----------
+    token : str
+        GitHub token for the user.
+    proteobench_repo_name : str
+        Name of the repository where the benchmarking results will be stored.
+    proteobot_repo_name : str
+        Name of the repository for pull requests and where new points are added.
+    parse_settings_dir : str
+        Directory containing parsing settings.
+    module_id : str
+        Module identifier for configuration.
+    """
 
     def __init__(
         self,
@@ -54,18 +73,21 @@ class DDAQuantIonModule(QuantModule):
 
         Parameters
         ----------
-        token
+        token : str
             GitHub token for the user.
-        proteobot_repo_name
-            Name of the repository for pull requests and where new points are added.
-        proteobench_repo_name
+        proteobench_repo_name : str
             Name of the repository where the benchmarking results will be stored.
+        proteobot_repo_name : str
+            Name of the repository for pull requests and where new points are added.
+        parse_settings_dir : str
+            Directory containing parsing settings.
+        module_id : str
+            Module identifier for configuration.
 
         Attributes
         ----------
         precursor_name: str
             Level of quantification.
-
         """
         super().__init__(
             token,
@@ -78,26 +100,38 @@ class DDAQuantIonModule(QuantModule):
         self.module_id = module_id
 
     def is_implemented(self) -> bool:
-        """Returns whether the module is fully implemented."""
+        """
+        Return whether the module is fully implemented.
+
+        Returns
+        -------
+        bool
+            True if the module is fully implemented, False otherwise.
+        """
         return True
 
     def benchmarking(
-        self, input_file_loc: any, input_format: str, user_input: dict, all_datapoints, default_cutoff_min_prec: int = 3
+        self,
+        input_file_loc: any,
+        input_format: str,
+        user_input: dict,
+        all_datapoints: pd.DataFrame,
+        default_cutoff_min_prec: int = 3,
     ) -> tuple[DataFrame, DataFrame, DataFrame]:
         """
         Main workflow of the module. Used to benchmark workflow results.
 
         Parameters
         ----------
-        input_file
+        input_file_loc : any
             Path to the workflow output file.
-        input_format
+        input_format : str
             Format of the workflow output file.
-        user_input
+        user_input : dict
             User provided parameters for plotting.
-        all_datapoints
+        all_datapoints : pd.DataFrame
             DataFrame containing all datapoints from the proteobench repo.
-        default_cutoff_min_prec
+        default_cutoff_min_prec : int
             Minimum number of runs an ion has to be identified in.
 
         Returns

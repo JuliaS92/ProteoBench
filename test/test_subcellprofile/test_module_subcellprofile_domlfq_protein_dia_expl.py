@@ -1,100 +1,92 @@
 import os
+from unittest.mock import patch
 
+import pandas as pd
 import pytest
 
-from proteobench.io.parsing.parse_proteins import load_input_file
-from proteobench.io.parsing.parse_settings import ParseSettingsBuilder
-
-TESTDATA_DIR = os.path.join(os.path.dirname(__file__), "../data/subcellprofile_domlfq_protein_DIA_EXPL")
-TESTDATA_FILES = {
-    "DIA-NN": os.path.join(TESTDATA_DIR, "DIA-NN_example_domlfq_report.pg_matrix.tsv"),
-    "FragPipe (DIA-NN quant)": os.path.join(TESTDATA_DIR, "FragPipe-DIA-NN_example_domlfq_report.pg_matrix.tsv"),
-    "AlphaDIA": os.path.join(TESTDATA_DIR, "AlphaDIA_example_domlfq_report.pg.matrix.tsv"),
-}
-SUPPORTED_SOFTWARE_TOOLS = ("DIA-NN", "FragPipe (DIA-NN quant)", "AlphaDIA")
-PARSE_SETTINGS_DIR = os.path.abspath(
-    os.path.join(
-        os.path.dirname(__file__),
-        "..",
-        "..",
-        "proteobench",
-        "io",
-        "parsing",
-        "io_parse_settings",
-        "subcellprofile",
-        "domlfq",
-        "protein",
-        "DIA",
-    )
+from proteobench.modules.subcellprofile.domlfq.protein.DIA.subcellprofile_domlfq_protein_DIA_EXPL import (
+    SubcellprofileDomlfqProteinDIAEXPLModule,
 )
 
+TESTDATA_DIR = os.path.join(os.path.dirname(__file__), "../data/subcellprofile")
+TESTDATA_FILES = {
+    "DIA-NN": os.path.join(TESTDATA_DIR, "TRIMMED_DIANN_1-9-2_report.pg_matrix.tsv"),
+    "FragPipe (DIA-NN quant)": os.path.join(TESTDATA_DIR, "TRIMMED_FragPipe_DIANNquant_2-0_report.pg_matrix.tsv"),
+    "AlphaDIA": os.path.join(TESTDATA_DIR, "TRIMMED_AlphaDIA_1-9-2_pg.matrix.tsv"),
+    "Spectronaut": os.path.join(TESTDATA_DIR, "TRIMMED_Spectronaut_19-5_20250130_154210_Proteobench-newdataset_DIA_Exploris_compartiments_ProteinPivot_Report.tsv"),  # noqa: E501; fmt: skip
+}
 
-def load_file(format_name: str):
-    """Method used to load the input file."""
-    input_df = load_input_file(TESTDATA_FILES[format_name], format_name)
-    return input_df
 
-
-class TestOutputFileReading:
-    """Simple tests for reading csv input files."""
-    def test_if_module_supports_search_tool(self):
-        """Test whether all software tools supported by the module are actually tested."""
-        parse_settings = ParseSettingsBuilder(
-            parse_settings_dir=PARSE_SETTINGS_DIR, module_id="subcellprofile_domlfq_protein_DIA_EXPL"
+class TestSubcellprofileDomlfqProteinDIAEXPLModule:
+    @pytest.fixture(autouse=True)
+    @patch("proteobench.github.gh.GithubProteobotRepo.clone_repo")
+    @patch("proteobench.github.gh.GithubProteobotRepo.read_results_json_repo")
+    def _init(self, mock_read_results_json_repo, mock_clone_repo):
+        self.user_input = {
+            "software_name": "MaxQuant",
+            "software_version": "1.0",
+            "search_engine_version": "1.0",
+            "search_engine": "MaxQuant",
+            "ident_fdr_psm": 0.01,
+            "ident_fdr_peptide": 0.05,
+            "ident_fdr_protein": 0.1,
+            "enable_match_between_runs": 1,
+            "precursor_mass_tolerance": "0.02 Da",
+            "fragment_mass_tolerance": "0.02 Da",
+            "enzyme": "Trypsin",
+            "allowed_miscleavages": 1,
+            "min_peptide_length": 6,
+            "max_peptide_length": 30,
+            # "comments_for_plotting": "" -> Doesn't seem to be required for the test"
+        }
+        mock_clone_repo.return_value = None
+        mock_read_results_json_repo.return_value = pd.DataFrame()
+        all_datapoints, _ = SubcellprofileDomlfqProteinDIAEXPLModule("").benchmarking(
+            TESTDATA_FILES["DIA-NN"], "DIA-NN", self.user_input, None
         )
-        for parsed_software_tool in parse_settings.INPUT_FORMATS:
-            assert parsed_software_tool in SUPPORTED_SOFTWARE_TOOLS
+        self.one_datapoint = all_datapoints
 
-    @pytest.mark.parametrize("software_tool", SUPPORTED_SOFTWARE_TOOLS)
-    def test_valid_and_supported_search_tool_settings_exists(self, software_tool):
-        """Test whether valid settings files exist for the tested software tools."""
-        parse_settings = ParseSettingsBuilder(
-            parse_settings_dir=PARSE_SETTINGS_DIR, module_id="subcellprofile_domlfq_protein_DIA_EXPL"
+    @patch("proteobench.github.gh.GithubProteobotRepo.clone_repo")
+    @patch("proteobench.github.gh.GithubProteobotRepo.read_results_json_repo")
+    def test_benchmarking_return_types_are_correct(self, mock_read_results_json_repo, mock_clone_repo):
+        mock_clone_repo.return_value = None
+        mock_read_results_json_repo.return_value = pd.DataFrame()
+        all_datapoints, input_df = SubcellprofileDomlfqProteinDIAEXPLModule("").benchmarking(
+            TESTDATA_FILES["DIA-NN"], "DIA-NN", self.user_input, None
         )
-        assert software_tool in parse_settings.INPUT_FORMATS
+        assert isinstance(all_datapoints, pd.DataFrame)
+        assert isinstance(input_df, pd.DataFrame)
 
-    @pytest.mark.parametrize("software_tool", SUPPORTED_SOFTWARE_TOOLS)
-    def test_input_file_loading(self, software_tool):
-        """Test whether the inputs input are loaded successfully."""
-        input_df = load_file(software_tool)
-        assert not input_df.empty
-
-    @pytest.mark.parametrize("software_tool", SUPPORTED_SOFTWARE_TOOLS)
-    def test_creation_of_parser_settings_instance(self, software_tool):
-        """Test whether the input files are loaded successfully."""
-
-        parse_settings_builder = ParseSettingsBuilder(
-            module_id="subcellprofile_domlfq_protein_DIA_EXPL", parse_settings_dir=PARSE_SETTINGS_DIR
+    @patch("proteobench.github.gh.GithubProteobotRepo.clone_repo")
+    @patch("proteobench.github.gh.GithubProteobotRepo.read_results_json_repo")
+    def test_all_metric_columns_present_in_all_datapoints(self, mock_read_results_json_repo, mock_clone_repo):
+        mock_clone_repo.return_value = None
+        mock_read_results_json_repo.return_value = pd.DataFrame()
+        all_datapoints, _ = SubcellprofileDomlfqProteinDIAEXPLModule("").benchmarking(
+            TESTDATA_FILES["DIA-NN"], "DIA-NN", self.user_input, None
         )
-        parse_settings = parse_settings_builder.build_parser(software_tool)
-        assert parse_settings is not None
+        expected_metrics_columns = [i[0] for i in SubcellprofileDomlfqProteinDIAEXPLModule.metrics]
+        assert all(column in all_datapoints.columns for column in expected_metrics_columns)
 
-    @pytest.mark.parametrize("software_tool", SUPPORTED_SOFTWARE_TOOLS)
-    def test_input_file_initial_parsing(self, software_tool):
-        """Test the initial parsing of the input file."""
+    @patch("proteobench.github.gh.GithubProteobotRepo.clone_repo")
+    def test_new_datapoint_is_added_to_existing_ones(self, mock_clone_repo):
+        mock_clone_repo.return_value = None
 
-        parse_settings_builder = ParseSettingsBuilder(
-            module_id="subcellprofile_domlfq_protein_DIA_EXPL", parse_settings_dir=PARSE_SETTINGS_DIR
+        # Change hash of existing datapoint to allow addition of the new datapoint with identical data
+        self.one_datapoint["intermediate_hash"] = "unique_hash"
+
+        all_datapoints, _ = SubcellprofileDomlfqProteinDIAEXPLModule("").benchmarking(
+            TESTDATA_FILES["DIA-NN"], "DIA-NN", self.user_input, self.one_datapoint
         )
+        assert len(all_datapoints) == 2
 
-        input_df = load_file(software_tool)
-        parse_settings = parse_settings_builder.build_parser(software_tool)
-        prepared_df, replicate_to_raw = parse_settings.convert_to_standard_format(input_df)
-
-        assert not prepared_df.empty
-        assert replicate_to_raw != {}
-
-    @pytest.mark.parametrize("software_tool", SUPPORTED_SOFTWARE_TOOLS)
-    def test_correct_number_of_rawfiles_present_in_parsed_input_file(self, software_tool):
-        """Test whether the correct number of rawfiles are present in the parsed input file."""
-        parse_settings_builder = ParseSettingsBuilder(
-            module_id="subcellprofile_domlfq_protein_DIA_EXPL", parse_settings_dir=PARSE_SETTINGS_DIR
+    @patch("proteobench.github.gh.GithubProteobotRepo.clone_repo")
+    def test_new_datapoint_already_present_in_datapoints_is_not_added(self, mock_clone_repo):
+        """This test requires that exactly the same input data is used for the new datapoint as for
+        `self.one_datapoint` in the fixture.
+        """
+        mock_clone_repo.return_value = None
+        all_datapoints, _ = SubcellprofileDomlfqProteinDIAEXPLModule("").benchmarking(
+            TESTDATA_FILES["DIA-NN"], "DIA-NN", self.user_input, self.one_datapoint
         )
-
-        input_df = load_file(software_tool)
-        parse_settings = parse_settings_builder.build_parser(software_tool)
-        prepared_df, replicate_to_raw = parse_settings.convert_to_standard_format(input_df)
-
-        parsed_rawfiles = sorted(prepared_df["Raw file"].unique())
-        expected_rawfiles = sorted(parse_settings.run_mapper.keys())
-        assert parsed_rawfiles == expected_rawfiles
+        assert len(all_datapoints) == 1

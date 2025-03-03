@@ -28,7 +28,7 @@ dependencies = [
   "toml",
   "PyGithub",
   "GitPython",
-  "domaps",
+  "domaps>=1.1",
 ]
 license = { file = "LICENSE" }
 name = "proteobench"
@@ -78,4 +78,9 @@ checks = [
     "SA01",
     "ES01",
     "RT03",
+    "SS06",
+]
+
+exclude = [
+'^test/.*',
 ]

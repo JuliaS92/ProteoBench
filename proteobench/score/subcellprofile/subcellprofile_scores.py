@@ -14,7 +14,7 @@ class Subcellprofile_Scores:
 
     def __init__(self):
         """Initialise the Subcellprofile_Scores object."""
-        self.sd: domaps.SpatialDataSet = None
+        self.sd: domaps.SpatialDataSet = None  # TODO: Update .complexes entry
         self.sdc: domaps.SpatialDataSetComparison = None
 
     def generate_SpatialDataSet(
@@ -72,20 +72,20 @@ class Subcellprofile_Scores:
         results["depth_id_total"] = self.sdc.df_quantity_pr_pg_combined.query(
             "filtering=='before_filtering' and type=='total'"
         )["number of protein groups"]
-        results["depth_profile_intersection"] = self.sdc.df_quantity_pr_pg_combined.query(
+        results["depth_profile_total"] = self.sdc.df_quantity_pr_pg_combined.query(
             "filtering=='after_filtering' and type=='total'"
         )["number of protein groups"]
-        results["depth_id_total"] = self.sdc.df_quantity_pr_pg_combined.query(
+        results["depth_id_intersection"] = self.sdc.df_quantity_pr_pg_combined.query(
             "filtering=='before_filtering' and type=='intersection'"
         )["number of protein groups"]
         results["depth_profile_intersection"] = self.sdc.df_quantity_pr_pg_combined.query(
             "filtering=='after_filtering' and type=='intersection'"
         )["number of protein groups"]
-        results["median_profile_reproducibility"] = self.median_profile_reproducibility()
-        results["mean_complex_scatter"] = self.complex_scatter_unnormalized()
+        results["median_profile_reproducibility"] = self._median_profile_reproducibility()
+        results["mean_complex_scatter"] = self._complex_scatter_unnormalized()
         return results
 
-    def median_profile_reproducibility(self):
+    def _median_profile_reproducibility(self):
         """
         Determine the median of distances for a dataframe.
 
@@ -96,7 +96,7 @@ class Subcellprofile_Scores:
         """
         return np.median(self.sdc.distances.to_numpy())
 
-    def complex_scatter_unnormalized(self, mode="mean") -> float:
+    def _complex_scatter_unnormalized(self, mode="mean") -> float:
         """
         Return the mean complex scatter from the SpatialDataSetComparison object.
 
