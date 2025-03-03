@@ -4,12 +4,12 @@ DDA Quantification Module for Peptidoform level Quantification.
 
 from __future__ import annotations
 
-import os
 from typing import Optional, Tuple
 
 import pandas as pd
 from pandas import DataFrame
 
+from proteobench.datapoint.quant_datapoint import QuantDatapoint
 from proteobench.datapoint.quant_datapoint import QuantDatapoint
 from proteobench.exceptions import (
     ConvertStandardFormatError,
@@ -22,6 +22,7 @@ from proteobench.exceptions import (
 )
 from proteobench.io.parsing.parse_peptidoform import load_input_file
 from proteobench.io.parsing.parse_settings import ParseSettingsBuilder
+from proteobench.modules.constants import MODULE_SETTINGS_DIRS
 from proteobench.modules.quant.quant_base.quant_base_module import QuantModule
 from proteobench.score.quant.quantscores import QuantScores
 
@@ -49,24 +50,6 @@ class DDAQuantPeptidoformModule(QuantModule):
         token: str,
         proteobot_repo_name: str = "Proteobot/Results_quant_peptidoform_DDA",
         proteobench_repo_name: str = "Proteobench/Results_quant_peptidoform_DDA",
-        parse_settings_dir: str = os.path.abspath(
-            os.path.join(
-                os.path.dirname(__file__),
-                "..",
-                "..",
-                "..",
-                "..",
-                "..",
-                "io",
-                "parsing",
-                "io_parse_settings",
-                "Quant",
-                "lfq",
-                "peptidoform",
-                "DDA",
-            )
-        ),
-        module_id: str = "quant_lfq_peptidoform_DDA",
     ):
         """
         Initialize the DDA Quantification Module for Peptidoform level Quantification.
@@ -88,11 +71,10 @@ class DDAQuantPeptidoformModule(QuantModule):
             token,
             proteobot_repo_name=proteobot_repo_name,
             proteobench_repo_name=proteobench_repo_name,
-            parse_settings_dir=parse_settings_dir,
-            module_id=module_id,
+            parse_settings_dir=MODULE_SETTINGS_DIRS[self.module_id],
+            module_id=self.module_id,
         )
         self.precursor_name = "peptidoform"
-        self.module_id = module_id
 
     def is_implemented(self) -> bool:
         """
@@ -179,6 +161,7 @@ class DDAQuantPeptidoformModule(QuantModule):
 
         # Generate current data point
         try:
+            current_datapoint = QuantDatapoint.generate_datapoint(
             current_datapoint = QuantDatapoint.generate_datapoint(
                 intermediate_data_structure, input_format, user_input, default_cutoff_min_prec=default_cutoff_min_prec
             )

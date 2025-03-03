@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import os
 from collections import defaultdict
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List
 
 import pandas as pd
 import toml
@@ -38,10 +38,6 @@ class ParseSettingsBuilder:
         self.PARSE_SETTINGS_TOMLS = toml.load(
             os.path.join(os.path.dirname(__file__), "io_parse_settings", "parse_settings_files.toml")
         )
-        if parse_settings_dir is None:
-            parse_settings_dir = os.path.join(
-                os.path.dirname(__file__), "io_parse_settings", "Quant", "lfq", "ion", "DDA"
-            )
 
         try:
             self.PARSE_SETTINGS_FILES = {
@@ -209,14 +205,16 @@ class ParseSettings:
                     df_filtered_melted["proforma"] + "|Z=" + df_filtered_melted["Charge"].astype(str)
                 )
             else:
-                print("Not all columns required for making the ion are available.")
+                # ! raise ValueError
+                print("Not all columns required for making the ion are available: 'proforma' and 'Charge'.")
             return df_filtered_melted, replicate_to_raw
 
         elif self.analysis_level == "peptidoform":
             if "proforma" in df_filtered_melted.columns:
                 df_filtered_melted["peptidoform"] = df_filtered_melted["proforma"]
             else:
-                print("Not all columns required for making the peptidoform are available.")
+                # ! raise ValueError
+                print("Not all columns required for making the peptidoform are available: 'proforma'.")
             return df_filtered_melted, replicate_to_raw
 
         elif self.analysis_level == "protein":
@@ -307,11 +305,11 @@ class ParseModificationSettings:
         if self.parser.analysis_level == "ion":
             try:
                 df["precursor ion"] = df["proforma"] + "|Z=" + df["Charge"].astype(str)
-            except KeyError:
+            except KeyError as e:
                 raise KeyError(
                     "Not all columns required for making the ion are available."
                     " Is the charge available in the input file?"
-                )
+                ) from e
 
             return df, replicate_to_raw
 

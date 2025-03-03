@@ -5,7 +5,6 @@ Module for parsing ion data from various formats.
 import math
 import os
 import re
-from typing import Dict, List, Optional
 
 import pandas as pd
 
@@ -125,7 +124,18 @@ def load_input_file(input_csv: str, input_format: str) -> pd.DataFrame:
         input_data_frame = pd.read_csv(input_csv, low_memory=False, sep="\t")
     elif input_format == "PEAKS":
         input_data_frame = pd.read_csv(input_csv, low_memory=False, sep=",")
-
+    elif input_format == "quantms":
+        input_data_frame = pd.read_csv(input_csv, low_memory=False)
+        input_data_frame = input_data_frame.assign(
+            proforma=input_data_frame["PeptideSequence"].str.replace(
+                r"\(([^)]+)\)",
+                r"",
+                regex=True,
+            ),
+        )
+        input_data_frame["Sequence"] = input_data_frame["PeptideSequence"].str.replace(r"\(([^)]+)\)", r"", regex=True)
+    else:
+        raise ValueError(f"Input format '{input_format}' not recognized.")
     return input_data_frame
 
 
