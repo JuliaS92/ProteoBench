@@ -222,6 +222,21 @@ class SubcellprofileDOMLFQUIObjects:
         except Exception as e:
             st.error(f"Unable to create the selectbox: {e}", icon="🚨")
 
+    def generate_main_submitted_selectbox(self) -> None:
+        """Creates the selectbox for the Streamlit UI."""
+        if self.variables_subcelldomlfq.selectbox_id_submitted_uuid not in st.session_state.keys():
+            st.session_state[self.variables_subcelldomlfq.selectbox_id_submitted_uuid] = uuid.uuid4()
+
+        try:
+            # TODO: Other labels based on different modules, e.g. mass tolerances are less relevant for DIA
+            st.selectbox(
+                "Select label to plot",
+                ["None", "precursor_mass_tolerance", "fragment_mass_tolerance", "enable_match_between_runs"],
+                key=st.session_state[self.variables_subcelldomlfq.selectbox_id_submitted_uuid],
+            )
+        except Exception as e:
+            st.error(f"Unable to create the selectbox: {e}", icon="🚨")
+
     def generate_y_axis_selectbox(self) -> None:
         """Creates the y axis selectbox for the Streamlit UI."""
         if self.variables_subcelldomlfq.selectbox_y_axis_id_uuid not in st.session_state.keys():
@@ -252,18 +267,32 @@ class SubcellprofileDOMLFQUIObjects:
         except Exception as e:
             st.error(f"Unable to create the selectbox: {e}", icon="🚨")
 
-    def generate_submitted_selectbox(self) -> None:
-        """Creates the selectbox for the Streamlit UI."""
-        if self.variables_subcelldomlfq.selectbox_id_submitted_uuid not in st.session_state.keys():
-            st.session_state[self.variables_subcelldomlfq.selectbox_id_submitted_uuid] = uuid.uuid4()
+    def generate_y_axis_submitted_selectbox(self) -> None:
+        """Creates the y axis selectbox for the Streamlit UI."""
+        if self.variables_subcelldomlfq.selectbox_y_axis_submitted_id_uuid not in st.session_state.keys():
+            st.session_state[self.variables_subcelldomlfq.selectbox_y_axis_submitted_id_uuid] = uuid.uuid4()
 
         try:
-            st.radio(
+            st.selectbox(
+                "Select metric to plot on y axis",
+                # TODO: parse these labels from the module
+                ["median_profile_reproducibility", "mean_complex_scatter"],
+                key=st.session_state[self.variables_subcelldomlfq.selectbox_y_axis_submitted_id_uuid],
+            )
+        except Exception as e:
+            st.error(f"Unable to create the selectbox: {e}", icon="🚨")
+
+    def generate_x_axis_submitted_selectbox(self) -> None:
+        """Creates the x axis selectbox for the Streamlit UI."""
+        if self.variables_subcelldomlfq.selectbox_x_axis_submitted_id_uuid not in st.session_state.keys():
+            st.session_state[self.variables_subcelldomlfq.selectbox_x_axis_submitted_id_uuid] = uuid.uuid4()
+
+        try:
+            st.selectbox(
                 "Select metric to plot on x axis",
                 # TODO: parse these labels from the module
-                options=["median_profile_reproducibility", "mean_complex_scatter"],
-                help="Toggle between median profile reproducibility and mean complex scatter metrics.",
-                key=st.session_state[self.variables_subcelldomlfq.selectbox_id_submitted_uuid],
+                ["depth_id_total", "depth_profile_total"],
+                key=st.session_state[self.variables_subcelldomlfq.selectbox_x_axis_submitted_id_uuid],
             )
         except Exception as e:
             st.error(f"Unable to create the selectbox: {e}", icon="🚨")
@@ -289,7 +318,7 @@ class SubcellprofileDOMLFQUIObjects:
                 metric_y=metric_y,
                 label=st.session_state[st.session_state[self.variables_subcelldomlfq.selectbox_id_submitted_uuid]],
             )
-            st.plotly_chart(fig_metric, use_container_width=True)
+            st.plotly_chart(fig_metric, use_container_width=True, key=self.variables_subcelldomlfq.fig_metric_submitted)
         except Exception as e:
             st.error(f"Unable to plot the datapoints: {e}", icon="🚨")
 
@@ -803,7 +832,9 @@ class SubcellprofileDOMLFQUIObjects:
     def display_all_data_results_submitted(self) -> None:
         """Displays the results for all data in Tab 1."""
         st.title("Results (All Data)")
-        self.generate_submitted_selectbox()
+        self.generate_main_submitted_selectbox()
+        self.generate_x_axis_submitted_selectbox()
+        self.generate_y_axis_submitted_selectbox()
         self.display_submitted_results()
 
 
