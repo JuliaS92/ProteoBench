@@ -222,6 +222,21 @@ class SubcellprofileDOMLFQUIObjects:
         except Exception as e:
             st.error(f"Unable to create the selectbox: {e}", icon="🚨")
 
+    def generate_y_axis_selectbox(self) -> None:
+        """Creates the y axis selectbox for the Streamlit UI."""
+        if self.variables_subcelldomlfq.selectbox_y_axis_id_uuid not in st.session_state.keys():
+            st.session_state[self.variables_subcelldomlfq.selectbox_y_axis_id_uuid] = uuid.uuid4()
+
+        try:
+            st.selectbox(
+                "Select metric to plot on y axis",
+                # TODO: parse these labels from the module
+                ["median_profile_reproducibility", "mean_complex_scatter"],
+                key=st.session_state[self.variables_subcelldomlfq.selectbox_y_axis_id_uuid],
+            )
+        except Exception as e:
+            st.error(f"Unable to create the selectbox: {e}", icon="🚨")
+
     def generate_x_axis_selectbox(self) -> None:
         """Creates the x axis selectbox for the Streamlit UI."""
         if self.variables_subcelldomlfq.selectbox_x_axis_id_uuid not in st.session_state.keys():
@@ -231,23 +246,8 @@ class SubcellprofileDOMLFQUIObjects:
             st.selectbox(
                 "Select metric to plot on x axis",
                 # TODO: parse these labels from the module
-                ["median_profile_reproducibility", "mean_complex_scatter"],
-                key=st.session_state[self.variables_subcelldomlfq.selectbox_x_axis_id_uuid],
-            )
-        except Exception as e:
-            st.error(f"Unable to create the selectbox: {e}", icon="🚨")
-
-    def generate_y_axis_selectbox(self) -> None:
-        """Creates the x axis selectbox for the Streamlit UI."""
-        if self.variables_subcelldomlfq.selectbox_y_axis_id_uuid not in st.session_state.keys():
-            st.session_state[self.variables_subcelldomlfq.selectbox_y_axis_id_uuid] = uuid.uuid4()
-
-        try:
-            st.selectbox(
-                "Select metric to plot on y axis",
-                # TODO: parse these labels from the module
                 ["depth_id_total", "depth_profile_total"],
-                key=st.session_state[self.variables_subcelldomlfq.selectbox_y_axis_id_uuid],
+                key=st.session_state[self.variables_subcelldomlfq.selectbox_x_axis_id_uuid],
             )
         except Exception as e:
             st.error(f"Unable to create the selectbox: {e}", icon="🚨")

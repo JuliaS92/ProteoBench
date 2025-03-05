@@ -18,8 +18,8 @@ class PlotDataPoint:
     @staticmethod
     def plot_metric(
         benchmark_metrics_df: pd.DataFrame,
-        metric_x: str = "median_profile_reproducibility",  # or mean_complex_scatter
-        metric_y: str = "depth_id_total",  # or depth_profile_total
+        metric_x: str = "depth_id_total",  # or depth_profile_total
+        metric_y: str = "median_profile_reproducibility",  # or mean_complex_scatter
         software_colors: Dict[str, str] = {
             "DIA-NN": "#8c564b",
             "AlphaDIA": "#4daf4a",
@@ -39,9 +39,9 @@ class PlotDataPoint:
         benchmark_metrics_df : pd.DataFrame
             The DataFrame containing benchmark metrics data.
         metric_x : str, optional
-            The metric to plot, either "median_profile_reproducibility" or "mean_complex_scatter", by default "median_profile_reproducibility".
-        metric_y : str, optional
             The metric to plot, either "depth_id_total" or "depth_profile_total", by default "depth_id_total".
+        metric_y : str, optional
+            The metric to plot, either "median_profile_reproducibility" or "mean_complex_scatter", by default "median_profile_reproducibility".
         software_colors : Dict[str, str], optional
             A dictionary mapping software names to their colors, by default predefined colors.
         mapping : Dict[str, int], optional
@@ -58,8 +58,8 @@ class PlotDataPoint:
         """
 
         # TODO: both y metrics seem to be series, logic is missing on which value to plot
-        x_values = benchmark_metrics_df[metric_x]
-        y_values = benchmark_metrics_df[metric_y].apply(lambda x: x[0])
+        x_values = benchmark_metrics_df[metric_x].apply(lambda x: x[0])
+        y_values = benchmark_metrics_df[metric_y]
 
         # Add hover text with detailed information for each data point
         hover_texts = []
@@ -156,8 +156,8 @@ class PlotDataPoint:
             # tmp_df["enable_match_between_runs"] = tmp_df["enable_match_between_runs"].astype(str)
             fig.add_trace(
                 go.Scatter(
-                    x=tmp_df[metric_x],
-                    y=tmp_df[metric_y].apply(lambda x: x[0]),
+                    x=tmp_df[metric_x].apply(lambda x: x[0]),
+                    y=tmp_df[metric_y],
                     mode="markers" if label == "None" else "markers+text",
                     hovertext=tmp_df["hover_text"],
                     text=tmp_df[label] if label != "None" else None,
