@@ -18,8 +18,8 @@ class PlotDataPoint:
     @staticmethod
     def plot_metric(
         benchmark_metrics_df: pd.DataFrame,
-        metric_x: str = "median_profile_reproducibility", # or mean_complex_scatter
-        metric_y: str = "depth_id_total", # or depth_profile_total
+        metric_x: str = "median_profile_reproducibility",  # or mean_complex_scatter
+        metric_y: str = "depth_id_total",  # or depth_profile_total
         software_colors: Dict[str, str] = {
             "DIA-NN": "#8c564b",
             "AlphaDIA": "#4daf4a",
@@ -125,9 +125,9 @@ class PlotDataPoint:
         )
 
         layout_yaxis_range = [
-                min(y_values) - min(max(y_values) * 0.05, 2000),
-                max(y_values) + min(max(y_values) * 0.05, 2000),
-            ]
+            min(y_values) - min(max(y_values) * 0.05, 2000),
+            max(y_values) + min(max(y_values) * 0.05, 2000),
+        ]
 
         layout_yaxis_title = (
             # TODO: replace by string defined in module

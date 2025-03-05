@@ -259,11 +259,11 @@ class SubcellprofileDOMLFQUIObjects:
 
         try:
             st.radio(
-            "Select metric to plot on x axis",
-            # TODO: parse these labels from the module
-            options=["median_profile_reproducibility", "mean_complex_scatter"],
-            help="Toggle between median profile reproducibility and mean complex scatter metrics.",
-            key=st.session_state[self.variables_subcelldomlfq.selectbox_id_submitted_uuid]
+                "Select metric to plot on x axis",
+                # TODO: parse these labels from the module
+                options=["median_profile_reproducibility", "mean_complex_scatter"],
+                help="Toggle between median profile reproducibility and mean complex scatter metrics.",
+                key=st.session_state[self.variables_subcelldomlfq.selectbox_id_submitted_uuid],
             )
         except Exception as e:
             st.error(f"Unable to create the selectbox: {e}", icon="🚨")
@@ -321,19 +321,17 @@ class SubcellprofileDOMLFQUIObjects:
         metric_x = st.session_state[st.session_state[self.variables_subcelldomlfq.selectbox_x_axis_id_uuid]]
         metric_y = st.session_state[st.session_state[self.variables_subcelldomlfq.selectbox_y_axis_id_uuid]]
 
-
         if len(data_points) == 0:
             st.error(f"No datapoints available for plotting", icon="🚨")
-
 
         fig_metric = PlotDataPoint.plot_metric(
             data_points,
             label=st.session_state[st.session_state[self.variables_subcelldomlfq.selectbox_id_uuid]],
             metric_x=metric_x,
-            metric_y=metric_y
+            metric_y=metric_y,
         )
         st.plotly_chart(fig_metric, use_container_width=True)
-        #except Exception as e:
+        # except Exception as e:
         #    st.error(f"Unable to plot the datapoints: {e}", icon="🚨")
 
         st.dataframe(data_points)
