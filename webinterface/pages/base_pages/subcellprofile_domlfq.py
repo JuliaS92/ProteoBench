@@ -23,7 +23,7 @@ from proteobench.io.parsing.parse_settings import ParseSettingsBuilder
 from proteobench.modules.subcellprofile.domlfq.protein.DIA.subcellprofile_domlfq_protein_DIA_EXPL import (
     SubcellprofileDomlfqProteinDIAEXPLModule as ProteinModule,
 )
-from proteobench.plotting.plot_quant import PlotDataPoint
+from proteobench.plotting.plot_subcell import PlotDataPoint
 
 logger: logging.Logger = logging.getLogger(__name__)
 
@@ -94,7 +94,7 @@ class SubcellprofileDOMLFQUIObjects:
         """Generates input fields in the Streamlit UI based on the specified format and content."""
         field_type = content.get("type")
         if field_type == "text_area":
-            return self.generate_text_area_widget(input_format, content, key)
+            return self.generate_text_area_widget(input_format, content)
         elif field_type == "text_input":
             return self._generate_text_input(input_format, content, key)
         elif field_type == "number_input":
@@ -225,14 +225,14 @@ class SubcellprofileDOMLFQUIObjects:
     def generate_x_axis_selectbox(self) -> None:
         """Creates the x axis selectbox for the Streamlit UI."""
         if self.variables_subcelldomlfq.selectbox_x_axis_id_uuid not in st.session_state.keys():
-            st.session_state[self.variables_subcelldomlfq.selectbox_id_uuid] = uuid.uuid4()
+            st.session_state[self.variables_subcelldomlfq.selectbox_x_axis_id_uuid] = uuid.uuid4()
 
         try:
             st.selectbox(
                 "Select metric to plot on x axis",
                 # TODO: parse these labels from the module
                 ["median_profile_reproducibility", "mean_complex_scatter"],
-                key=st.session_state[self.variables_subcelldomlfq.selectbox_id_uuid],
+                key=st.session_state[self.variables_subcelldomlfq.selectbox_x_axis_id_uuid],
             )
         except Exception as e:
             st.error(f"Unable to create the selectbox: {e}", icon="🚨")
@@ -240,14 +240,14 @@ class SubcellprofileDOMLFQUIObjects:
     def generate_y_axis_selectbox(self) -> None:
         """Creates the x axis selectbox for the Streamlit UI."""
         if self.variables_subcelldomlfq.selectbox_y_axis_id_uuid not in st.session_state.keys():
-            st.session_state[self.variables_subcelldomlfq.selectbox_id_uuid] = uuid.uuid4()
+            st.session_state[self.variables_subcelldomlfq.selectbox_y_axis_id_uuid] = uuid.uuid4()
 
         try:
             st.selectbox(
                 "Select metric to plot on y axis",
                 # TODO: parse these labels from the module
                 ["depth_id_total", "depth_profile_total"],
-                key=st.session_state[self.variables_subcelldomlfq.selectbox_id_uuid],
+                key=st.session_state[self.variables_subcelldomlfq.selectbox_y_axis_id_uuid],
             )
         except Exception as e:
             st.error(f"Unable to create the selectbox: {e}", icon="🚨")
@@ -258,10 +258,12 @@ class SubcellprofileDOMLFQUIObjects:
             st.session_state[self.variables_subcelldomlfq.selectbox_id_submitted_uuid] = uuid.uuid4()
 
         try:
-            st.selectbox(
-                "Select label to plot",
-                ["None", "precursor_mass_tolerance", "fragment_mass_tolerance"],
-                key=st.session_state[self.variables_subcelldomlfq.selectbox_id_submitted_uuid],
+            st.radio(
+            "Select metric to plot on x axis",
+            # TODO: parse these labels from the module
+            options=["median_profile_reproducibility", "mean_complex_scatter"],
+            help="Toggle between median profile reproducibility and mean complex scatter metrics.",
+            key=st.session_state[self.variables_subcelldomlfq.selectbox_id_submitted_uuid]
             )
         except Exception as e:
             st.error(f"Unable to create the selectbox: {e}", icon="🚨")
@@ -281,22 +283,18 @@ class SubcellprofileDOMLFQUIObjects:
         #    return
 
         self.initialize_submitted_data_points()
-        data_points_filtered = self.filter_data_submitted_slider()
+        data_points = st.session_state[self.variables_subcelldomlfq.all_datapoints_submitted]
+        metric_x = st.session_state[st.session_state[self.variables_subcelldomlfq.selectbox_x_axis_id_uuid]]
+        metric_y = st.session_state[st.session_state[self.variables_subcelldomlfq.selectbox_y_axis_id_uuid]]
 
-        metric = st.radio(
-            "Select metric to plot",
-            options=["Median", "Mean"],
-            help="Toggle between median and mean absolute difference metrics.",
-            key="placeholder2",  # TODO: add to variables
-        )
-
-        if len(data_points_filtered) == 0:
+        if len(data_points) == 0:
             st.error(f"No datapoints available for plotting", icon="🚨")
 
         try:
             fig_metric = PlotDataPoint.plot_metric(
-                data_points_filtered,
-                metric=metric,
+                data_points,
+                metric_x=metric_x,
+                metric_y=metric_y,
                 label=st.session_state[st.session_state[self.variables_subcelldomlfq.selectbox_id_submitted_uuid]],
             )
             st.plotly_chart(fig_metric, use_container_width=True)
@@ -318,28 +316,27 @@ class SubcellprofileDOMLFQUIObjects:
     def display_existing_results(self) -> None:
         """Displays the results section of the page for existing data."""
         self.initialize_main_data_points()
-        data_points_filtered = self.filter_data_main_slider()
+        data_points = st.session_state[self.variables_subcelldomlfq.all_datapoints]
 
-        metric = st.radio(
-            "Select metric to plot",
-            options=["Median", "Mean"],
-            help="Toggle between median and mean absolute difference metrics.",
-        )
+        metric_x = st.session_state[st.session_state[self.variables_subcelldomlfq.selectbox_x_axis_id_uuid]]
+        metric_y = st.session_state[st.session_state[self.variables_subcelldomlfq.selectbox_y_axis_id_uuid]]
 
-        if len(data_points_filtered) == 0:
+
+        if len(data_points) == 0:
             st.error(f"No datapoints available for plotting", icon="🚨")
 
-        try:
-            fig_metric = PlotDataPoint.plot_metric(
-                data_points_filtered,
-                label=st.session_state[st.session_state[self.variables_subcelldomlfq.selectbox_id_uuid]],
-                metric=metric,
-            )
-            st.plotly_chart(fig_metric, use_container_width=True)
-        except Exception as e:
-            st.error(f"Unable to plot the datapoints: {e}", icon="🚨")
 
-        st.dataframe(data_points_filtered)
+        fig_metric = PlotDataPoint.plot_metric(
+            data_points,
+            label=st.session_state[st.session_state[self.variables_subcelldomlfq.selectbox_id_uuid]],
+            metric_x=metric_x,
+            metric_y=metric_y
+        )
+        st.plotly_chart(fig_metric, use_container_width=True)
+        #except Exception as e:
+        #    st.error(f"Unable to plot the datapoints: {e}", icon="🚨")
+
+        st.dataframe(data_points)
         self.display_download_section()
 
     def submit_to_repository(self, params) -> Optional[str]:
@@ -404,7 +401,7 @@ class SubcellprofileDOMLFQUIObjects:
             config = json.load(file)
         for key, value in config.items():
             if key == "comments_for_plotting":
-                self.user_input[key] = self.generate_input_widget(self.user_input["input_format"], value)
+                self.user_input[key] = self.generate_input_widget(self.user_input["input_format"], value, key)
             else:
                 self.user_input[key] = None
 
@@ -431,6 +428,7 @@ class SubcellprofileDOMLFQUIObjects:
     def initialize_main_data_points(self) -> None:
         """Initializes the all_datapoints variable in the session state."""
         if self.variables_subcelldomlfq.all_datapoints not in st.session_state.keys():
+            print("adding all_datapoints variable in the session state")
             st.session_state[self.variables_subcelldomlfq.all_datapoints] = None
             st.session_state[self.variables_subcelldomlfq.all_datapoints] = self.proteinmodule.obtain_all_data_points(
                 all_datapoints=st.session_state[self.variables_subcelldomlfq.all_datapoints]
