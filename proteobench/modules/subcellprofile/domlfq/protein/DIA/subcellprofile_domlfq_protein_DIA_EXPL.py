@@ -96,7 +96,7 @@ class SubcellprofileDomlfqProteinDIAEXPLModule(SubcellprofileBaseModule):
         self,
         token: str,
         proteobot_repo_name: str = "Proteobot/Results_subcellprofile_DOMLFQ_protein_DIA_EXPL",
-        proteobench_repo_name: str = " Proteobench/Results_subcellprofile_DOMLFQ_protein_DIA_EXPL",
+        proteobench_repo_name: str = "Proteobench/Results_subcellprofile_DOMLFQ_protein_DIA_EXPL",
         parse_settings_dir: str = os.path.abspath(
             os.path.join(
                 os.path.dirname(__file__),
