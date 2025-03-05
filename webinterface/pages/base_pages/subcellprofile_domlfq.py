@@ -268,14 +268,6 @@ class SubcellprofileDOMLFQUIObjects:
         except Exception as e:
             st.error(f"Unable to create the selectbox: {e}", icon="🚨")
 
-    def initialize_submitted_slider(self) -> None:
-        if self.variables_subcelldomlfq.slider_id_submitted_uuid not in st.session_state.keys():
-            st.session_state[self.variables_subcelldomlfq.slider_id_submitted_uuid] = uuid.uuid4()
-        if st.session_state[self.variables_subcelldomlfq.slider_id_submitted_uuid] not in st.session_state.keys():
-            st.session_state[
-                st.session_state[self.variables_subcelldomlfq.slider_id_submitted_uuid]
-            ] = self.variables_subcelldomlfq.default_val_slider
-
     def display_submitted_results(self) -> None:
         """Displays the results section of the page for submitted data."""
         # handled_submission = self.process_submission_form()
@@ -442,25 +434,6 @@ class SubcellprofileDOMLFQUIObjects:
                 all_datapoints=st.session_state[self.variables_subcelldomlfq.all_datapoints_submitted]
             )
 
-    def filter_data_main_slider(self) -> None:
-        """Filters the data points based on the slider value."""
-        if self.variables_subcelldomlfq.slider_id_uuid in st.session_state.keys():
-            return self.proteinmodule.filter_data_point(
-                st.session_state[self.variables_subcelldomlfq.all_datapoints],
-                st.session_state[st.session_state[self.variables_subcelldomlfq.slider_id_uuid]],
-            )
-
-    def filter_data_submitted_slider(self) -> None:
-        """Filters the data points based on the slider value."""
-        if (
-            self.variables_subcelldomlfq.slider_id_submitted_uuid in st.session_state.keys()
-            and self.variables_subcelldomlfq.all_datapoints_submitted in st.session_state.keys()
-        ):
-            return self.proteinmodule.filter_data_point(
-                st.session_state[self.variables_subcelldomlfq.all_datapoints_submitted],
-                st.session_state[st.session_state[self.variables_subcelldomlfq.slider_id_submitted_uuid]],
-            )
-
     def set_highlight_column_in_submitted_data(self) -> None:
         """Initializes the highlight column in the data points."""
         df = st.session_state[self.variables_subcelldomlfq.all_datapoints_submitted]
@@ -476,36 +449,6 @@ class SubcellprofileDOMLFQUIObjects:
             df["Highlight"] = df["Highlight"].astype(bool).fillna(False)
         # only needed for last elif, but to be sure apply always:
         st.session_state[self.variables_subcelldomlfq.all_datapoints_submitted] = df
-
-    def generate_main_slider(self) -> None:
-        """Creates a slider input."""
-        if self.variables_subcelldomlfq.slider_id_uuid not in st.session_state:
-            st.session_state[self.variables_subcelldomlfq.slider_id_uuid] = uuid.uuid4()
-        slider_key = st.session_state[self.variables_subcelldomlfq.slider_id_uuid]
-
-        st.markdown(open(self.variables_subcelldomlfq.description_slider_md, "r").read())
-
-        st.select_slider(
-            label="Minimal ion quantifications (# samples)",
-            options=[1, 2, 3, 4, 5, 6],
-            value=st.session_state.get(slider_key, self.variables_subcelldomlfq.default_val_slider),
-            key=slider_key,
-        )
-
-    def generate_submitted_slider(self) -> None:
-        """Creates a slider input."""
-        if self.variables_subcelldomlfq.slider_id_submitted_uuid not in st.session_state:
-            st.session_state[self.variables_subcelldomlfq.slider_id_submitted_uuid] = uuid.uuid4()
-        slider_key = st.session_state[self.variables_subcelldomlfq.slider_id_submitted_uuid]
-
-        st.markdown(open(self.variables_subcelldomlfq.description_slider_md, "r").read())
-
-        st.select_slider(
-            label="Minimal ion quantifications (# samples)",
-            options=[1, 2, 3, 4, 5, 6],
-            value=st.session_state.get(slider_key, self.variables_subcelldomlfq.default_val_slider),
-            key=slider_key,
-        )
 
     def display_download_section(self, reset_uuid=False) -> None:
         """Render the selector and area for raw data download."""
@@ -673,10 +616,6 @@ class SubcellprofileDOMLFQUIObjects:
 
         # reload buffer: https://stackoverflow.com/a/64478151/9684872
         self.user_input["input_csv"].seek(0)
-        if st.session_state[self.variables_subcelldomlfq.slider_id_submitted_uuid] in st.session_state.keys():
-            set_slider_val = st.session_state[st.session_state[self.variables_subcelldomlfq.slider_id_submitted_uuid]]
-        else:
-            set_slider_val = self.variables_subcelldomlfq.default_val_slider
 
         if self.variables_subcelldomlfq.all_datapoints_submitted in st.session_state.keys():
             all_datapoints = st.session_state[self.variables_subcelldomlfq.all_datapoints_submitted]
@@ -688,7 +627,6 @@ class SubcellprofileDOMLFQUIObjects:
             self.user_input["input_format"],
             self.user_input,
             all_datapoints,
-            default_cutoff_min_prec=set_slider_val,
         )
 
     def handle_submitted_table_edits(self) -> None:
@@ -829,43 +767,9 @@ class SubcellprofileDOMLFQUIObjects:
             st.error(":x: Please provide a result file", icon="🚨")
             return False
 
-        st.session_state[self.variables_subcelldomlfq.result_perf] = st.session_state[
-            self.variables_subcelldomlfq.result_perf
-        ][
-            st.session_state[self.variables_subcelldomlfq.result_perf]["nr_observed"]
-            >= st.session_state[st.session_state[self.variables_subcelldomlfq.slider_id_uuid]]
-        ]
-
-        if recalculate:
-            parse_settings = self.parsesettingsbuilder.build_parser(self.user_input["input_format"])
-
-            fig_logfc = PlotDataPoint.plot_fold_change_histogram(
-                st.session_state[self.variables_subcelldomlfq.result_perf], parse_settings.species_expected_ratio()
-            )
-            fig_CV = PlotDataPoint.plot_CV_violinplot(st.session_state[self.variables_subcelldomlfq.result_perf])
-            st.session_state[self.variables_subcelldomlfq.fig_cv] = fig_CV
-            st.session_state[self.variables_subcelldomlfq.fig_logfc] = fig_logfc
-        else:
-            fig_logfc = st.session_state[self.variables_subcelldomlfq.fig_logfc]
-            fig_CV = st.session_state[self.variables_subcelldomlfq.fig_cv]
-
         if self.variables_subcelldomlfq.first_new_plot:
-            col1, col2 = st.columns(2)
-            col1.subheader("Log2 Fold Change distributions by species.")
-            col1.markdown(
-                """
-                    Left Panel : log2 fold changes calculated from your data
-                """
-            )
-            col1.plotly_chart(fig_logfc, use_container_width=True)
-
-            col2.subheader("Coefficient of variation distribution in Group A and B.")
-            col2.markdown(
-                """
-                    Right Panel Panel : CV calculated from your data
-                """
-            )
-            col2.plotly_chart(fig_CV, use_container_width=True)
+            # add in depth plots here, or downloads that can be uploaded to domabc webpage
+            pass
         else:
             pass
 
@@ -886,7 +790,7 @@ class SubcellprofileDOMLFQUIObjects:
             key=f"{random_uuid}",
         )
 
-        return fig_logfc
+        return
 
     def display_all_data_results_main(self) -> None:
         """Displays the results for all data in Tab 1."""
