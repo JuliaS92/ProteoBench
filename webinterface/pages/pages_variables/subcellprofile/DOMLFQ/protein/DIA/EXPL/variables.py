@@ -13,6 +13,7 @@ class VariablesSubcellprofileDOMLFQ:
     submit: str = "submit_subcell_domlfq"
     fig_logfc: str = "fig_logfc_subcell_domlfq"
     fig_metric: str = "fig_metric_subcell_domlfq"
+    fig_metric_submitted: str = "fig_metric_submitted_subcell_domlfq"
     fig_cv: str = "fig_CV_violinplot_subcell_domlfq"
     result_perf: str = "result_perf_subcell_domlfq"
     meta_data: str = "meta_data_subcell_domlfq"
@@ -37,12 +38,12 @@ class VariablesSubcellprofileDOMLFQ:
     selectbox_id_uuid: str = "selectbox_id_subcell_domlfq"
     selectbox_x_axis_id_uuid: str = "selectbox_x_axis_id_subcell_domlfq"
     selectbox_y_axis_id_uuid: str = "selectbox_y_axis_id_subcell_domlfq"
-    slider_id_submitted_uuid: str = "slider_id_submitted_subcell_domlfq"
-    slider_id_uuid: str = "slider_id_subcell_domlfq"
+    selectbox_x_axis_submitted_id_uuid: str = "selectbox_x_axis_submitted_id_subcell_domlfq"
+    selectbox_y_axis_submitted_id_uuid: str = "selectbox_y_axis_submitted_id_subcell_domlfq"
     download_selector_id_uuid: str = "download_selector_id_subcell_domlfq"
     table_id_uuid: str = "table_id_subcell_domlfq"
 
-    additional_params_json: str = "../webinterface/configuration/subcell_domlfq.json"
+    additional_params_json: str = "../proteobench/io/params/json/Quant/lfq/ion/DIA/fields.json"
 
     description_module_md: str = "pages/markdown_files/subcellprofile/DOMLFQ/protein/DIA/EXPL/introduction.md"
     description_files_md: str = "pages/markdown_files/subcellprofile/DOMLFQ/protein/DIA/EXPL/file_description.md"
