@@ -322,6 +322,24 @@ class QuantUIObjects:
         Any
             The checkbox input field.
         """
+    def _generate_checkbox(self, input_format: str, content: dict, key: str = "") -> Any:
+        """
+        Generate a checkbox input field.
+
+        Parameters
+        ----------
+        input_format : str
+            The input format.
+        content : dict
+            The content of the checkbox.
+        key : str
+            The key of the checkbox.
+
+        Returns
+        -------
+        Any
+            The checkbox input field.
+        """
         value = content.get("value", {})
         if key in st.session_state[self.variables_quant.params_file_dict].keys():
             value = st.session_state[self.variables_quant.params_file_dict].get(key)
@@ -408,7 +426,7 @@ class QuantUIObjects:
         )
 
         if len(data_points_filtered) == 0:
-            st.error(f"No datapoints available for plotting", icon="🚨")
+            st.error("No datapoints available for plotting", icon="🚨")
 
         try:
             fig_metric = PlotDataPoint.plot_metric(
@@ -446,7 +464,7 @@ class QuantUIObjects:
         )
 
         if len(data_points_filtered) == 0:
-            st.error(f"No datapoints available for plotting", icon="🚨")
+            st.error("No datapoints available for plotting", icon="🚨")
 
         try:
             fig_metric = PlotDataPoint.plot_metric(
@@ -945,7 +963,7 @@ class QuantUIObjects:
         ]
 
         if len(st.session_state[self.variables_quant.all_datapoints]) == 0:
-            st.error(f"No datapoints available for plotting", icon="🚨")
+            st.error("No datapoints available for plotting", icon="🚨")
 
         try:
             fig_metric = PlotDataPoint.plot_metric(
@@ -977,7 +995,7 @@ class QuantUIObjects:
             )
 
             st.text(f"Parsed and selected parameters:\n{pformat(params.__dict__)}")
-        except KeyError as e:
+        except KeyError:
             st.error("Parsing of meta parameters file for this software is not supported yet.", icon="🚨")
         except Exception as e:
             input_f = self.user_input["input_format"]
