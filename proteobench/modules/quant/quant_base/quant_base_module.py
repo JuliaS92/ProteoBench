@@ -34,6 +34,7 @@ from proteobench.io.params.msaid import extract_params as extract_params_msaid
 from proteobench.io.params.msangel import extract_params as extract_params_msangel
 from proteobench.io.params.peaks import read_peaks_settings as extract_params_peaks
 from proteobench.io.params.proline import extract_params as extract_params_proline
+from proteobench.io.params.quantms import extract_params as extract_params_quantms
 from proteobench.io.params.sage import extract_params as extract_params_sage
 from proteobench.io.params.spectronaut import (
     read_spectronaut_settings as extract_params_spectronaut,
@@ -79,15 +80,16 @@ class QuantModule:
         "WOMBAT": extract_params_spectronaut,
         # TODO needs to be replace with parameter extraction function
         "Proteome Discoverer": extract_params_spectronaut,
+        "quantms": extract_params_quantms,
     }
 
     def __init__(
         self,
-        token: Optional[str] = None,
-        proteobench_repo_name: str = "",
-        proteobot_repo_name: str = "",
-        parse_settings_dir: str = "",
-        module_id: str = "",
+        token: Optional[str],
+        proteobench_repo_name: str,
+        proteobot_repo_name: str,
+        parse_settings_dir: str,
+        module_id: str,
     ):
         """
         Initialize the QuantModule with GitHub repo and settings.
